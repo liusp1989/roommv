@@ -30,6 +30,6 @@
 	</bean>
 	 <!-- Only needed because we require fileupload in the org.springframework.samples.mvc.fileupload package -->  
      <bean id="multipartResolver" class="com.liusp.roommv.common.LocalCommonsMultipartResolver" >
-     	<property name="maxUploadSize" value="100000"></property>
+     	<property name="maxUploadSize" value="1000000"></property>
      </bean>  
 </beans>  

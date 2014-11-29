@@ -1,5 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.liusp</groupId>
 	<artifactId>roommv-allIn-one</artifactId>
@@ -11,7 +11,7 @@
 	<modules>
 		<module>roommv</module>
 		<module>paoding</module>
-	</modules>
+  </modules>
 	<properties>
 		<spring.version>3.2.3.RELEASE</spring.version>
 		<hibernate.version>3.5.6-Final</hibernate.version>

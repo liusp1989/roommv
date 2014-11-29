@@ -217,17 +217,13 @@
             }
         },
         setImage: function(img){
-        	var  urlPrefix = editor.getOpt('imageManagerUrlPrefix');
-        	var  imageUrlPrefix = editor.getOpt('imageUrlPrefix');
             /* 不是正常的图片 */
             if (!img.tagName || img.tagName.toLowerCase() != 'img' && !img.getAttribute("src") || !img.src) return;
+
             var wordImgFlag = img.getAttribute("word_img"),
                 src = wordImgFlag ? wordImgFlag.replace("&amp;", "&") : (img.getAttribute('_src') || img.getAttribute("src", 2).replace("&amp;", "&")),
                 align = editor.queryCommandValue("imageFloat");
-                if(src.indexOf("http://")<0){
-                src =urlPrefix + src.substring(src.indexOf(imageUrlPrefix)+imageUrlPrefix.length);
-                src=src.replace(".//","./");
-                }
+
             /* 防止onchange事件循环调用 */
             if (src !== $G("url").value) $G("url").value = src;
             if(src) {
@@ -270,14 +266,9 @@
         getInsertList: function () {
             var data = this.getData();
             if(data['url']) {
-            	var   urlPrefix = editor.getOpt('imageManagerUrlPrefix');
-            	var  imageUrlPrefix = editor.getOpt('imageUrlPrefix');
-            	var url = data['url'];
-            	url = imageUrlPrefix+url.substring(url.indexOf(urlPrefix)+urlPrefix.length);
-            	url=url.replace(".//","./");
                 return [{
-                    src: url,
-                    _src: url,
+                    src: data['url'],
+                    _src: data['url'],
                     width: data['width'] || '',
                     height: data['height'] || '',
                     border: data['border'] || '',
@@ -781,7 +772,6 @@
                 prefix = editor.getOpt('imageUrlPrefix');
             for (i = 0; i < this.imageList.length; i++) {
                 data = this.imageList[i];
-                url = (prefix + data.url).replace(".//","./");
                 list.push({
                     src: prefix + data.url,
                     _src: prefix + data.url,
@@ -861,7 +851,6 @@
         },
         /* 向后台拉取图片列表数据 */
         getImageData: function () {
-        	
             var _this = this;
 
             if(!_this.listEnd && !this.isLoadingData) {
@@ -907,8 +896,6 @@
         pushData: function (list) {
             var i, item, img, icon, _this = this,
                 urlPrefix = editor.getOpt('imageManagerUrlPrefix');
-            var imageListPath = editor.getOpt('imageManagerListPath');
-            var imageSeparator = editor.getOpt('imageSeparator');
             for (i = 0; i < list.length; i++) {
                 if(list[i] && list[i].url) {
                     item = document.createElement('li');
@@ -921,11 +908,8 @@
                         }
                     })(img));
                     img.width = 113;
-                    var imageUrl = list[i].url;
-                    var changePart = imageUrl.substring(imageUrl.lastIndexOf(imageSeparator)+imageSeparator.length);
-                    var imgsrc = (urlPrefix +imageListPath+changePart).replace(".//","./");
-                    img.setAttribute('src',imgsrc + (imageUrl.indexOf('?') == -1 ? '?noCache=':'&noCache=') + (+new Date()).toString(36));
-                    img.setAttribute('_src', imgsrc );
+                    img.setAttribute('src', urlPrefix + list[i].url + (list[i].url.indexOf('?') == -1 ? '?noCache=':'&noCache=') + (+new Date()).toString(36) );
+                    img.setAttribute('_src', urlPrefix + list[i].url);
                     domUtils.addClass(icon, 'icon');
 
                     item.appendChild(img);
@@ -962,15 +946,11 @@
             }
         },
         getInsertList: function () {
-        	var  urlPrefix = editor.getOpt('imageManagerUrlPrefix');
-        	var  imageUrlPrefix = editor.getOpt('imageUrlPrefix');
             var i, lis = this.list.children, list = [], align = getAlign();
             for (i = 0; i < lis.length; i++) {
                 if (domUtils.hasClass(lis[i], 'selected')) {
                     var img = lis[i].firstChild,
                         src = img.getAttribute('_src');
-                        src =imageUrlPrefix + src.substring(src.indexOf(urlPrefix)+urlPrefix.length);
-                        src=src.replace(".//","./");
                     list.push({
                         src: src,
                         _src: src,

@@ -20,7 +20,6 @@
         </style>
         <script type="text/javascript" src="../internal.js"></script>
         <script src="../../ueditor.parse.js"></script>
-        <script src="../../third-party/jquery-1.10.2.min.js"></script>
         <title></title>
     </head>
     <body class="view">
@@ -30,26 +29,6 @@
     </body>
     <script>
         document.getElementById('preview').innerHTML = editor.getContent();
-        var hrefObj=$("#preview [href]");
-        var srcObj=$("#preview [src]");
-        var backgroundObj=$("#preview [data-background]");
-        var oldprefix ="./";
-        var newprefix ="../../../";
-        hrefObj.each(function(){
-            	var href = $(this).attr("href");
-            	 $(this).attr("href",href.replace(oldprefix,newprefix));
-        });
-        
-        srcObj.each(function(){
-            	var src =  $(this).attr("src");
-            	 $(this).attr("src",src.replace(oldprefix,newprefix));
-        });
-        backgroundObj.each(function(){
-        	var background =  $(this).attr("data-background");
-        	 $(this).attr("data-background",background.replace(oldprefix,newprefix));
-    });
-
-
         uParse('#preview',{
             rootPath : '../../',
             chartContainerHeight:500

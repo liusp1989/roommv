@@ -13,13 +13,13 @@
 </head>
 <body>
 	<form id="imageForm" action="<c:url value='/upload/htmlImage' />"
-		method="post" enctype="multipart/form-data" style="width:100%">
-		<div style="margin:0px; display:inline">
-			标题图片：<input type="file" name="file" />
+		method="post" enctype="multipart/form-data" style="width: 100%" onsubmit="return validate();">
+		<div style="margin: 0px; display: inline">
+			标题图片：<input type="file" name="file" class="btn btn-primary" accept="image/*" id="file" />
 
-			<input type="button" id="imageSubmit" value="上传图片"  style="margin-top:20px"/>
-
-			<img src="<c:out value='${result.value}'/>" alt="" id="image" style="float:right;margin-right:700px;overflow:hidden"/>
+			<input id="imageSubmit" type="submit" class="btn btn-primary" style="margin-top: 20px" value="上传图片" ></input>
+			<img src="<c:out value='${result.value}'/>" alt="" id="image"
+				style="float: right; margin-right: 700px; overflow: hidden" />
 		</div>
 	</form>
 </body>
@@ -41,8 +41,28 @@
 					.write("<script src=\"<c:url value='/js/bootstrap.min.js'/>\"><\/script>");
 </script>
 <script type="text/javascript">
-$("#imageSubmit").click(function(){
-	$("#imageForm").submit();
-});
+
+	function validate() {
+		var fileName = $("#file").val();
+		if (fileName == "") {
+			alert("请先选择要上传的文件");
+			return false;
+		} else {
+			var types = [ "BMP", "PCX", "TIFF", "GIF", "JPEG", "TGA", "EXIF",
+					"FPX", "SVG", "PSD", "CDR", "PCD", "DXF", "UFO", "EPS",
+					"AI", "PNG", "HDRI", "RAW", "bmp", "pcx", "tiff", "gif",
+					"jpeg", "tga", "exif", "fpx", "svg", "psd", "cdr", "pcd",
+					"dxf", "ufo", "eps", "ai", "png", "hdri", "raw" ];
+			var type = fileName.substring(fileName.lastIndexOf("."));
+			var rightTypes = types.some(function(item, index, array) {
+				return (type == item);
+			});
+			if (!rightTypes) {
+				alert("所选文件不属于图片类型");
+				return false;
+			}
+		}
+		return true;
+	}
 </script>
 

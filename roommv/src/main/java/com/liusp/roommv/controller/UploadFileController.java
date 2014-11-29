@@ -32,7 +32,7 @@ public class UploadFileController {
 		File destFilePathFile = new File(destFilePath);
 		try {
 		if (!destFilePathFile.exists()) {
-			destFilePathFile.mkdir();
+				destFilePathFile.mkdirs();
 		}
 		String oriFileName = file.getOriginalFilename();
 			String destFileName = String.valueOf(new Date().getTime())
