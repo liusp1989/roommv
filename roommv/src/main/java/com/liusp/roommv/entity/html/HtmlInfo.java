@@ -1,15 +1,27 @@
 package com.liusp.roommv.entity.html;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 import com.liusp.roommv.entity.base.AbstractCRUDBaseBO;
 
+@Entity
+@Table(name = "html")
 public class HtmlInfo extends AbstractCRUDBaseBO {
+	@Id
 	@Column(name = "id")
 	private String id;
 
+	@Column(name = "title")
+	private String title;
+
 	@Column(name = "imageUrl")
 	private String imageUrl;
+
+	@Column(name = "tempHtmlUrl")
+	private String tempHtmlUrl;
 
 	@Column(name = "ipInfo")
 	private String ipInfo;
@@ -32,6 +44,14 @@ public class HtmlInfo extends AbstractCRUDBaseBO {
 
 	public void setId(String id) {
 		this.id = id;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
 	public String getImageUrl() {
@@ -80,6 +100,14 @@ public class HtmlInfo extends AbstractCRUDBaseBO {
 
 	public void setNotGoodTimes(Integer notGoodTimes) {
 		this.notGoodTimes = notGoodTimes;
+	}
+
+	public String getTempHtmlUrl() {
+		return tempHtmlUrl;
+	}
+
+	public void setTempHtmlUrl(String tempHtmlUrl) {
+		this.tempHtmlUrl = tempHtmlUrl;
 	}
 
 }

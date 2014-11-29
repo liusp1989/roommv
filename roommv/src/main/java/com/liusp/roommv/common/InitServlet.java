@@ -17,7 +17,7 @@ public class InitServlet extends HttpServlet {
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
 		// String webAppPath = config.getServletContext().getRealPath(".");
-		// System.setProperty(RoommvConstant.WEB_APP_PATH_KEY,
+		// System.setProperty("",
 		// webAppPath.replace("\\", "/"));
 	}
 }

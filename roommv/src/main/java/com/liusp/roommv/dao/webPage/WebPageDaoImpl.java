@@ -1,8 +1,12 @@
 package com.liusp.roommv.dao.webPage;
 
-import com.liusp.roommv.dao.base.AbstractBaseDaoImpl;
+import org.springframework.stereotype.Service;
 
+import com.liusp.roommv.dao.base.BaseDaoImpl;
+import com.liusp.roommv.entity.webPage.WebPage;
 
-public class WebPageDaoImpl extends AbstractBaseDaoImpl implements IWebPageDao {
+@Service(value = "webPageDao")
+public class WebPageDaoImpl extends BaseDaoImpl<WebPage, String>
+		implements IWebPageDao<WebPage, String> {
 
 }

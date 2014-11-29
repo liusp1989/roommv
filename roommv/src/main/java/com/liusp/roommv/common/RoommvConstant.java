@@ -4,6 +4,8 @@ public class RoommvConstant {
 	public static final String WEB_ROOT = System.getProperty("webapp.root");
 	public static final String HTML_FILES_PATH = WEB_ROOT
 			+ System.getProperty("html.files.path");
+	public static final String HTML_FILES_TEMPPATH = WEB_ROOT
+			+ System.getProperty("html.files.tempPath");
 	public static final String HTML_INDEXES_PATH = System
 			.getProperty("html.indexes.path");
 	public static final int TEXT_FRAGMENT_TIMES = Integer.valueOf(System

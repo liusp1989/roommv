@@ -11,15 +11,13 @@
 <link href="<c:url value='/css/bootstrap-theme.min.css'/>"
 	type="text/css" rel="stylesheet" />
 </head>
-<body>
+<body  onload="load()">
 	<form id="imageForm" action="<c:url value='/upload/htmlImage' />"
 		method="post" enctype="multipart/form-data" style="width: 100%" onsubmit="return validate();">
 		<div style="margin: 0px; display: inline">
 			标题图片：<input type="file" name="file" class="btn btn-primary" accept="image/*" id="file" />
-
+			 <input id="id" type="hidden" name="id" value="${id }" />
 			<input id="imageSubmit" type="submit" class="btn btn-primary" style="margin-top: 20px" value="上传图片" ></input>
-			<img src="<c:out value='${result.value}'/>" alt="" id="image"
-				style="float: right; margin-right: 700px; overflow: hidden" />
 		</div>
 	</form>
 </body>
@@ -42,18 +40,24 @@
 </script>
 <script type="text/javascript">
 
+	function load() {
+		var id = $(window.parent.document).find("#id").val();
+		$("#id").val(id);
+		var url = "<c:out value='${result.value}'/>";
+		$(window.parent.document).find("#showIframe").attr("src",url);
+	}
 	function validate() {
 		var fileName = $("#file").val();
 		if (fileName == "") {
 			alert("请先选择要上传的文件");
 			return false;
 		} else {
-			var types = [ "BMP", "PCX", "TIFF", "GIF", "JPEG", "TGA", "EXIF",
+			var types = [ "BMP", "PCX", "TIFF", "GIF", "JPEG", "TGA", "EXIF","JPG",
 					"FPX", "SVG", "PSD", "CDR", "PCD", "DXF", "UFO", "EPS",
 					"AI", "PNG", "HDRI", "RAW", "bmp", "pcx", "tiff", "gif",
 					"jpeg", "tga", "exif", "fpx", "svg", "psd", "cdr", "pcd",
-					"dxf", "ufo", "eps", "ai", "png", "hdri", "raw" ];
-			var type = fileName.substring(fileName.lastIndexOf("."));
+					"dxf", "ufo", "eps", "ai", "png", "hdri", "raw","jpg" ];
+			var type = fileName.substring(fileName.lastIndexOf(".")+1);
 			var rightTypes = types.some(function(item, index, array) {
 				return (type == item);
 			});
