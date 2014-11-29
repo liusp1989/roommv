@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="Generator" content="EditPlus®">
+  <meta name="Author" content="">
+  <meta name="Keywords" content="">
+  <meta name="Description" content="">
+  <title>你好，用户</title>
+ </head>
+ <body>
+  <div name="content">你好，这是一个测试页面，你好出现第二次，你。。。。。。。。。。。。。。。。好刘书鹏</div>
+  <p name="author">jedis</p>
+  <p name="createDate"></p>
+ </body>
+ <script src="http://libs.baidu.com/jquery/1.11.1/jquery.js"></script>
+  <script src="/js/jquery-1.11.1.min.js"></script>
+ <script language="JavaScript">
+ function setDate(){
+	 var date =new Date().toLocaleString()+' 星期'+'日一二三四五六'.charAt(new Date().getDay());
+	 $("p[name='createDate']").html(date);
+ }
+ setInterval(setDate,1000);
+ </script>
+</html>

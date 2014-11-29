@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="Generator" content="EditPlus®">
+  <meta name="Author" content="">
+  <meta name="Keywords" content="">
+  <meta name="Description" content="">
+  <title>你好，用户</title>
+ </head>
+ <body>
+  <div name="content">原网址：http://hi.baidu.com/lszhuhaichao/blog/item/ccffc7cb858f1514bf09e66f.html
+
+Lucene3.0之查询处理（1）：原理2010-03-06 23:37Lucene3.0之查询处理（1）：原理
+
+1、 查询的三种方式
+
+①     顺序查询：简单，但查询效率低
+
+②     索引查询：快速，需要基础索引结构支撑
+
+2、 理论模型
+
+①     布尔模型：基于集合论和布尔代数的一种简单检索模型
+
+②     向量模型：查询串和文档之间分配不同的权值，权值大小放映了文档库中的文档与用户查询串的相关度。查询得到的结果文档按照权值计算相关度有关排序，所以向量模型得到的匹配文档可以是全部精确匹配，也可以是部分匹配查询串。
+
+3、 查询流程
+
+用户查询请求输入->查询词频->查询词频出现->查询词格式化->文本库索引匹配->相似度和排序计算->结果排重与生成。
+
+4、 Lucence3.0查询概述
+
+1、 主要利用查询工具IndexSearcher类
+
+这是检索的主要控制和工具，也是所有搜索操作的入口。其构造方法主要有：
+
+IndexSearcher(Directory path)
+
+IndexSearcher(Directory path, boolean readOnly)
+
+IndexSearcher(IndexReader r)
+
+IndexSearcher(IndexReader reader, IndexReader[] subReaders, int[] docStarts)
+
+这里推荐主要使用第1个和第2个构造方法。
+
+2、 其它相关的类
+
+①     Query：抽象类，必须通过一系列子类来表述检索的具体需求。
+
+②     QueryParser：查询分析器。处理用户输入的查询条件。把用户输入的非格式化检索词转化成后台检索可以理解的Query对象
+
+查询最基本的结果返回方式是通过Hits对象来提供。Hits提供了检索查询结果的缓冲，为结果的展示和返回提供支持。Hits中的结果集已经按照相关性进行了排序，前面的文档结果表明与查询词更为相似。
+
+Lucene3.0之查询（2）：查询类型1
+
+1、 查询Query对象
+
+Lucnce查询主要有两种方式。一是通过Query子类构造函数方法生成子类。这种方法最大的好处是非常直观，可以根据自己的功能目标挑选合适的子类来够着具体的Query对象。
+
+另一种查询方式是通过QueryParse动态构造查询对象。这种方法使用了parse方法，具体构造的对象类型需要根据查询词的内容来确定。除了少数特殊查询，几乎所有的查询检索都可以通过QueryParser来代替特定子类的构造函数来查询对象生成功能。
+
+2、 最小项查询TermQuery
+
+适合关键字查询文档，大小写敏感。
+
+①     Term term = new Term(“content”, “星期一”);
+
+TermQueryquery = new TermQuery(term);
+
+②     String str = “星期一”;
+
+Analyzer analyzer = new Analyzer();
+
+QueryParser parser = new QueryParser(“content”, analyzer);
+
+Query query = parser.parse(str);
+
+3、 区域范围查询RangeQuery
+
+在年龄、日期、分数、数量等情况下经常会使用到。通常的模式使用起始值和终止值来确定区间。有点类似SQL语句中的between…and…语句。生成RangeQuery的实例需要两个对应的Term对象分别描述起始点和终止点。另外还要有一个标志参数，用来表明是否包含区间范围的边界。如果标志参数为true，表明检索查询匹配时需要包含边界，否则为不包含边界。
+
+①     Term termStart = new Term(“weight”, ”40”);
+
+Term termEnd = new Term(“weight”, “50”);
+
+TermRangeQuery query = new TermRangeQuery("numval",lowerTerm,upperTerm,true,true);
+
+②     String str = “{40 TO 50}”;
+
+Analyzer analyzer = new Analyzer();
+
+QueryParser parser = new QueryParser(“content”, analyzer);
+
+Query query = parser.parse(str);
+
+4、 逻辑组合搜索BooleanQuery
+
+①   Term term1 = new Term(“content”, “星期一”);
+
+Term term2 = new Term(“content”, “五月一日”);
+
+TermQuery query1 = new TermQuery(term1);
+
+TermQuery query2 = new TermQuery(term2);
+
+BooleanQuery query = new BooleanQuery();
+
+Query.add(query1.BooleanClause.Occur.MUST);
+
+Query.add(query2.BooleanClause.Occur.MUST);
+
+AND查询：MUST+MUST；NO查询：MUST+MUST_NOT或者SHOULD+MUST_NOT；OR查询：SHOULD+SHOULD；
+
+②     String str = ”(星期一 AND 五月一日)”
+
+Analyzer analyzer = new Analyzer();
+
+QueryParser parser = new QueryParser(“content”, analyzer);
+
+Query query = parser.parse(str);
+
+5、 字串前缀查询RefixQuery
+
+①     使用PrefixQuery构造前缀查询
+
+前缀查询的直接构造方法是使用Term构造一个最小项对象，同时把它作为前缀的生成参数。构造的查询对象提交检索查询，得到的结果以Term项内的文本值为开头字符的所有文章。
+
+Term term = new Term(“content”, “五月一日”);
+
+PrefixQuery query = new PrefixQuery(term);
+
+②     String str = “(五月一日)”;
+
+Analyzer analyzer = new Analyzer();
+
+QueryParser parser = new QueryParser(“content”, analyzer);
+
+Query query = parser.parse(str);
+
+6、 短语搜索PhraseQuery
+
+①     PhraseQuery构造短语查询
+
+Term term1 = new Term(“content”, “星期”);
+
+Term term2 = new Term(“content”, “一”);
+</div>
+  <p name="author">jedis</p>
+  <p name="createDate"></p>
+ </body>
+ <script src="http://libs.baidu.com/jquery/1.11.1/jquery.js"></script>
+  <script src="/js/jquery-1.11.1.min.js"></script>
+ <script language="JavaScript">
+ function setDate(){
+	 var date =new Date().toLocaleString()+' 星期'+'日一二三四五六'.charAt(new Date().getDay());
+	 $("p[name='createDate']").html(date);
+ }
+ setInterval(setDate,1000);
+ </script>
+</html>
