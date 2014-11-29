@@ -1,0 +1,13 @@
+		sb.append(" SELECT gsc.id as id,gs.id as goodsSetId,item.price as price,gs.isVirtual as isVirtual,gs.goodsType as goodsType,");
+		sb.append(" gs.isPromote as isPromote,gs.promotePrice as  promotePrice,gs.marketPrice as marketPrice,");
+		sb.append(" gs.salable as salable,gs.isMarketable as isMarketable,gs.calcelTime as calcelTime,gs.gtype as gtype,");
+		sb.append(" gs.gnumber as gnumber,gs.isPgoods as isPgoods,gs.pgoods as pgoods");
+		sb.append(" ,gs.`name` as `name`,gs.description as description,gs.metaKeywords as metaKeywords,");
+		sb.append(" gs.metaDescription as metaDescription,gs.productImageListStore as productImageListStore");
+		sb.append(" ,gs.isDefault as isDefault,gs.sellingPoint as sellingPoint,gs.useTemplate as useTemplate,");
+		sb.append(" gs.isShowGift as isShowGift,gs.giftUrl as giftUrl,gs.`status` as `status`,gs.salableDate as salableDate,item.goodsSetPrice as goodsSetPrice");
+		sb.append(" FROM  goodsSet gs  INNER JOIN goodsSetCombo gsc ON gs.id = gsc.goodsSet_id INNER JOIN");
+		sb.append(" (select sum(IFNULL(gsi.price,0)) as goodsSetPrice ,IFNULL(p.price,0)) as price,gsr.goodsSetCombo_id ");
+		sb.append(" from goodsSetRelation gsr  INNER JOIN goodsSetItem gsi ON gsr.goodsSetItem_id=gsi.id INNER JOIN  ");
+		sb.append(" product p ON p.id=gsi.product_id GROUP BY gsr.goodsSetCombo_id) as item on gsc.id=item.goodsSetCombo_id");
+		sb.append(" where gsc.id in (:ids)");
