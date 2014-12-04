@@ -21,6 +21,7 @@
 	<mvc:resources location="/WEB-INF/images/" mapping="/images/**" />
 	<mvc:resources location="/WEB-INF/js/" mapping="/js/**" />
 	<mvc:resources location="/WEB-INF/views/staticpages/" mapping="/staticpages/**" />
+	<mvc:resources location="/WEB-INF/views/tempstaticpages/" mapping="/tempstaticpages/**" />
 	<mvc:resources location="/WEB-INF/ueditor/" mapping="/ueditor/**" />
 	<mvc:default-servlet-handler />
 	<bean

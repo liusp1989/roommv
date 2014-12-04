@@ -20,8 +20,11 @@ public class HtmlInfo extends AbstractCRUDBaseBO {
 	@Column(name = "imageUrl")
 	private String imageUrl;
 
-	@Column(name = "tempHtmlUrl")
-	private String tempHtmlUrl;
+	@Column(name = "htmlId")
+	private String htmlId;
+
+	@Column(name = "content")
+	private String content;
 
 	@Column(name = "ipInfo")
 	private String ipInfo;
@@ -37,6 +40,12 @@ public class HtmlInfo extends AbstractCRUDBaseBO {
 
 	@Column(name = "notGoodTimes")
 	private Integer notGoodTimes;
+
+	@Column(name = "auditStatus")
+	private String auditStatus;
+
+	@Column(name = "remark")
+	private String remark;
 
 	public String getId() {
 		return id;
@@ -60,6 +69,14 @@ public class HtmlInfo extends AbstractCRUDBaseBO {
 
 	public void setImageUrl(String imageUrl) {
 		this.imageUrl = imageUrl;
+	}
+
+	public String getContent() {
+		return content;
+	}
+
+	public void setContent(String content) {
+		this.content = content;
 	}
 
 	public String getIpInfo() {
@@ -102,12 +119,28 @@ public class HtmlInfo extends AbstractCRUDBaseBO {
 		this.notGoodTimes = notGoodTimes;
 	}
 
-	public String getTempHtmlUrl() {
-		return tempHtmlUrl;
+	public String getHtmlId() {
+		return htmlId;
 	}
 
-	public void setTempHtmlUrl(String tempHtmlUrl) {
-		this.tempHtmlUrl = tempHtmlUrl;
+	public void setHtmlId(String htmlId) {
+		this.htmlId = htmlId;
+	}
+
+	public String getAuditStatus() {
+		return auditStatus;
+	}
+
+	public void setAuditStatus(String auditStatus) {
+		this.auditStatus = auditStatus;
+	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
 	}
 
 }

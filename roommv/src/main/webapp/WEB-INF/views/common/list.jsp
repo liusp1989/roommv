@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
    pageEncoding="UTF-8" isELIgnored="false"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="roommv" uri="http://www.roommv.com/jsp/jstl/roommv"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -25,26 +26,45 @@
 <div style="margin-top:-100px;">
 </div>
 <div style="margin-top:200px">
-	<button type="button"  style="float:right;margin-right: 50px;"
+	<button type="button"  style="float:right;margin-right: 50px;" id="addBtn"
 		class="btn btn-primary btn-sm" onclick="addHtmlInfo();">新增文章</button>
 </div>
 <div style="padding-top:50px;">
 	<table class="table table-condensed" >
 		<tr>
-			<th class="info">文章编号</th>
-			<th class="info">文章标题</th>
-			<th class="info">创建时间</th>
-			<th class="info">更新时间</th>
+			<th class="info" style="TEXT-ALIGN: center;width:16%">文章编号</th>
+			<th class="info" style="TEXT-ALIGN: center;width:16%">文章标题</th>
+			<th class="info" style="TEXT-ALIGN: center;width:16%">创建时间</th>
+			<th class="info" style="TEXT-ALIGN: center;width:16%">更新时间</th>
+			<th class="info" style="TEXT-ALIGN: center;width:16%">审核状态</th>
+			<th class="info" style="TEXT-ALIGN: center;width:16%">操作</th>
 		</tr>
 					<c:if test="${not empty htmlInfos}">
 						<c:forEach items="${htmlInfos}" var="htmlInfo">
-							<tr>
-							<td>${htmlInfo.id }</td>
-							<td>${htmlInfo.title }</td>
-							<td>${htmlInfo.createDate }</td>
-							<td>${htmlInfo.updateDate }</td>
-							</tr>
-						</c:forEach>
+					<tr>
+						<td>${htmlInfo.id }</td>
+						<td>${htmlInfo.title }</td>
+						<td>${htmlInfo.createDate }</td>
+						<td>${htmlInfo.updateDate }</td>
+						<td>
+						<c:if test="${htmlInfo.auditStatus eq 'ing'}">
+							${roommv:auditStatusName("ing")}
+						</c:if>
+						<c:if test="${htmlInfo.auditStatus eq 'pass'}">
+							${roommv:auditStatusName("pass")}
+						</c:if>
+						<c:if test="${htmlInfo.auditStatus eq 'fail'}">
+							${roommv:auditStatusName("fail")}
+						</c:if>
+						</td>
+						<td>
+							<button type="button" id="editBtn" class="btn btn-primary btn-sm"
+								onclick="editHtmlInfo('${htmlInfo.id }');">修改</button>
+							<button type="button" id="viewBtn" class="btn btn-primary btn-sm"
+								onclick="viewHtmlInfo('${htmlInfo.id }');">查看</button>
+						</td>
+					</tr>
+				</c:forEach>
 					</c:if>
 					<c:if test="${empty htmlInfos}">
 						<tr>
@@ -65,24 +85,16 @@
 		window.jQuery||document.write("<script src=\"<c:url value='/js/bootstrap.min.js'/>\"><\/script>");
 	</script>
 <script type="text/javascript">
-
 	function addHtmlInfo() {
-		var iWidth = 1000; //弹出窗口的宽度;
-		var iHeight = 700; //弹出窗口的高度;
-		var iTop = (window.screen.availHeight - 30 - iHeight) / 2; //获得窗口的垂直位置;
-		var iLeft = (window.screen.availWidth - 10 - iWidth) / 2; //获得窗口的水平位置;
-		window
-				.open(
-						"<c:url value='/htmlInfo/add'/>",
-						"newwindow",
-						"height="
-								+ iHeight
-								+ ",width="
-								+ iWidth
-								+ ",top="
-								+ iTop
-								+ ",left="
-								+ iLeft
-								+ ",toolbar=no,menubar=no,scrollbars=yes, resizable=yes,location=no, status=no,z-look=yes");
-	}
+		window.open("<c:url value='/htmlInfo/add'/>");
+		
+	};
+	
+	function editHtmlInfo(id){
+		 window.open("<c:url value='/htmlInfo/edit'/>/"+id);
+	};
+	
+	function viewHtmlInfo(id){
+		window.open("<c:url value='/htmlInfo/view'/>/"+id);
+	};
 </script>

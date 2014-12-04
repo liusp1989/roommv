@@ -40,11 +40,19 @@
 </script>
 <script type="text/javascript">
 
-	function load() {
+	function load() {//当修改页面初始化时，result.value为空，所以需要重新去后台取一边
 		var id = $(window.parent.document).find("#id").val();
 		$("#id").val(id);
-		var url = "<c:out value='${result.value}'/>";
-		$(window.parent.document).find("#showIframe").attr("src",url);
+		//var url = "<c:out value='${result.value}'/>";
+		$.ajax({url:"<c:url value='/htmlInfo/imageUrl'/>",
+				type:"POST",
+				data:{"id":id},
+				success:function(result){
+					if(result.resultCode==0){
+						$(window.parent.document).find("#showIframe").attr("src",result.value);
+					}
+				}
+				});
 	}
 	function validate() {
 		var fileName = $("#file").val();
