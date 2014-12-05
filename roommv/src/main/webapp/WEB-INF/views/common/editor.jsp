@@ -25,14 +25,16 @@
 <body>
 <fieldset>
 		<div style="margin-left: 50px">
+			<form action="<c:url value='/htmlInfo/save'/>" id="htmlInfoForm" name="htmlInfoForm" method="post">
 			<div style="margin-top: 10px">
 				当前文档编号：${htmlInfo.id } 
-				<input id="id" type="hidden" name="htmlInfo.id" value="${htmlInfo.id }" />
+				<input id="id" type="hidden" name="id" value="${htmlInfo.id }" />
 			</div>
 			<div style="margin-top: 10px">
 				<input type="hidden" name="creator" value="${htmlInfo.creator }" />
 				<input type="hidden" name="updator" value="${htmlInfo.updator }" />
 				<input type="hidden" name="htmlId" id="htmlId" value="${htmlInfo.htmlId }" />
+				<input type="hidden" name="content" id="content" value="${htmlInfo.content }" />
 			</div>
 			<div style="margin-top: 10px">
 				标题： <input type="text" name="title" id="title" value="${htmlInfo.title }" /><span style="margin-left:5px;"><font color="red">*</font></span>
@@ -47,6 +49,7 @@
 				<script id="editor" type="text/plain"
 					style="width:90%;height:450px;"></script>
 			</div>
+			</form>
 			<div style="margin-top: 10px">
 				<input id="cancel" type="button" class="btn btn-primary" onclick="cancel()"  style="margin-top: 20px;margin-right: 400px;float:right" value="放弃文章" ></input>
 				<input id="submit" type="button" class="btn btn-primary" onclick="save()" style="margin-top: 20px;margin-right: 50px;float:right" value="提交文章" ></input>
@@ -64,49 +67,25 @@
 		window.jQuery||document.write("<script src=\"<c:url value='/js/bootstrap.min.js'/>\"><\/script>");
 	</script>
 <script type="text/javascript">
-	var ue = UE.getEditor('editor');
-	$(function(){
-		var content ="<c:out value='${htmlInfo.content }'/>";
-		content = content.replace("+"," ");
-		var decodeContent = decodeURIComponent(content);
-		debugger;
-		ue.ready(function() {
-			UE.getEditor('editor').execCommand('insertHtml',decodeContent);  //赋值给UEditor
-	    });
-	});
 
+	var ue = UE.getEditor('editor');
+	$(function() {
+		var content = "<c:out value='${htmlInfo.content }' escapeXml='false'/>";
+		ue.ready(function() {
+			UE.getEditor('editor').execCommand('insertHtml',content); //赋值给UEditor
+		});
+	});
 
 	function save() {
 		var hasContent = UE.getEditor('editor').hasContents();
-
 		if (!hasContent) {
 			alert("还没有编辑文章");
 		} else {
 			debugger;
-			var bodyContent = decodeURI(decodeURI(UE.getEditor('editor').getContent()));
-			var id = $("#id").val();
-			var title = decodeURI(decodeURI($("#title").val().trim()));
-			var htmlId = $("#htmlId").val();
-			var url = "<c:url value='/htmlInfo/save'/>";
-			var data = "id="+id+"&title="+title+"&bodyContent="+bodyContent+"&htmlId="+htmlId;
-			if (title == "") {
-				alert("标题不能为空");
-			} else {
-				$.ajax({
-					type : 'POST',
-					url : url,
-					data : data,
-					success : function(result) {
-						if (result.resultCode == 0) {
-							alert("成功");
-							window.opener.location.reload();
-							window.close();
-						} else {
-							alert("操作失败");
-						}
-					}
-				});
-			}
+			var bodyContent = UE.getEditor('editor').getContent();
+			var formatContent = bodyContent.replace(/\"/g,"'");
+			$("#content").val(formatContent);
+			$("#htmlInfoForm").submit();
 		}
 	}
 	function cancel() {

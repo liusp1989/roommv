@@ -16,6 +16,7 @@ import org.apache.lucene.document.FieldType;
 import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
+import org.apache.lucene.index.IndexWriterConfig.OpenMode;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
@@ -36,10 +37,13 @@ public class HtmlIndexer implements Indexer {
 	private String indexesPath;
 	private String filesPath;
 	private static Analyzer analyzer;
+	private OpenMode openMode = OpenMode.APPEND;// 索引创建模式 增量还是新增
 
-	public HtmlIndexer(final String indexesPath, final String filesPath) {
+	public HtmlIndexer(final String indexesPath, final String filesPath,
+			OpenMode openMode) {
 		this.indexesPath = indexesPath;
 		this.filesPath = filesPath;
+		this.openMode = openMode;
 	}
 
 	public HtmlIndexer() {
@@ -207,6 +211,7 @@ public class HtmlIndexer implements Indexer {
 				throws IOException {
 			IndexWriterConfig indexWriterConfig = new IndexWriterConfig(
 					Version.LATEST, analyzer);
+		indexWriterConfig.setOpenMode(openMode);
 			Directory directory = FSDirectory.open(indexesFile);
 		IndexWriter indexWriter = new IndexWriter(directory,
 								indexWriterConfig);

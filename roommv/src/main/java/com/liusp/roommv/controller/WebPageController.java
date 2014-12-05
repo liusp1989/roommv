@@ -27,9 +27,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.liusp.roommv.common.RoommvConstant;
-import com.liusp.roommv.index.HtmlIndexer;
 import com.liusp.roommv.index.HtmlSearcher;
-import com.liusp.roommv.index.Indexer;
 import com.liusp.roommv.service.webPage.IWebPageService;
 import com.liusp.roommv.vo.Html;
 import com.liusp.roommv.vo.Page;
@@ -95,10 +93,6 @@ public class WebPageController {
 			ParseException, InvalidTokenOffsetsException {
 		// TODO Auto-generated method stub
 		Analyzer analyzer = new PaodingAnalyzer();
-		Indexer htmlIndexer = new HtmlIndexer(
-				RoommvConstant.HTML_INDEXES_PATH,
-				RoommvConstant.HTML_FILES_PATH);
-		htmlIndexer.setAnalyzer(analyzer);
 		HtmlSearcher htmlSearcher = new HtmlSearcher(
 				RoommvConstant.HTML_INDEXES_PATH);
 		htmlSearcher.setAnalyzer(analyzer);
