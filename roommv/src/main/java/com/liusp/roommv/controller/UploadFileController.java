@@ -56,10 +56,10 @@ public class UploadFileController {
 			htmlInfo.setUpdator("");
 			htmlInfo.setImageUrl(imageUrl);
 			htmlInfo.setIpInfo(request.getRemoteAddr());
-			if (htmlInfoService.findObjectById(id) == null) {
-				htmlInfoService.addObject(htmlInfo);
+			if (htmlInfoService.getHtmlInfoById(id) == null) {
+				htmlInfoService.auditHtmlInfo(htmlInfo);
 			} else {
-				htmlInfoService.updateObject(htmlInfo);
+				htmlInfoService.updateHtmlInfo(htmlInfo);
 			}
 			ajaxResult.setResultCode(AjaxResult.ResultCode.SUCCESS);
 			ajaxResult.setValue(imageUrl);

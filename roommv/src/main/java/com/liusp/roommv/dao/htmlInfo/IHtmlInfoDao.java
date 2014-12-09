@@ -1,10 +1,22 @@
 package com.liusp.roommv.dao.htmlInfo;
 
-import java.io.Serializable;
+import java.util.List;
+import java.util.Map;
 
-import com.liusp.roommv.dao.base.IBaseDao;
+import com.liusp.roommv.annotation.MybatisMapper;
+import com.liusp.roommv.entity.html.HtmlInfo;
 
-public interface IHtmlInfoDao<T, PK extends Serializable> extends
-		IBaseDao<T, PK> {
+@MybatisMapper
+public interface IHtmlInfoDao {
+
+	List<HtmlInfo> queryHtmlInfos(Map<String, Object> criteria);
+
+	void addHtmlInfo(HtmlInfo htmlInfo);
+
+	void updateHtmlInfo(HtmlInfo htmlInfo);
+
+	void deleteHtmlInfo(HtmlInfo htmlInfo);
+
+	HtmlInfo queryHtmlInfoById(String id);
 
 }

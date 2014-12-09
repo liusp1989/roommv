@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liusp.roommv.dao.htmlInfo.IHtmlInfoDao">
+	<select id="queryHtmlInfos" parameterType="map" resultType="HtmlInfo">
+		SELECT * FROM htmlinfo
+	</select>
+	<select id="queryHtmlInfoById" parameterType="string"
+		resultType="HtmlInfo">
+		SELECT * FROM htmlinfo where id=#{id}
+	</select>
+	<insert id="addHtmlInfo" parameterType="HtmlInfo">
+		INSERT INTO htmlinfo (
+		id,
+		title,
+		imageUrl,
+		htmlId,
+		content,
+		ipInfo,
+		viewTimes,
+		shareTimes,
+		goodTimes,
+		notGoodTimes,
+		auditStatus,
+		remark,
+		createDate,
+		creator,
+		updateDate,
+		updator
+		)
+		VALUES
+		(
+		#{id,jdbcType=VARCHAR},#{title,jdbcType=VARCHAR},#{imageUrl,jdbcType=VARCHAR},#{htmlId,jdbcType=VARCHAR}
+		,
+		#{content,jdbcType=VARCHAR},#{ipInfo,jdbcType=VARCHAR},#{viewTimes,jdbcType=VARCHAR},#{shareTimes,jdbcType=INTEGER}
+		,
+		#{goodTimes,jdbcType=INTEGER},#{notGoodTimes,jdbcType=INTEGER},#{auditStatus,jdbcType=INTEGER},#{remark,jdbcType=VARCHAR}
+		,#{createDate,jdbcType=TIMESTAMP},#{creator,jdbcType=VARCHAR},#{updateDate,jdbcType=TIMESTAMP},#{updator,jdbcType=VARCHAR}
+		)
+	</insert>
+	<update id="updateHtmlInfo" parameterType="HtmlInfo">
+		UPDATE htmlinfo 
+		<set>
+			<if test="title!=null">title=#{title}</if>
+			<if test="imageUrl!=null">and imageUrl=#{}</if>
+			<if test="content!=null">and content=#{content}</if>
+			<if test="ipInfo!=null">and ipInfo=#{ipInfo}</if>
+			<if test="viewTimes!=null">and viewTimes=#{viewTimes}</if>
+			<if test="shareTimes!=null">and shareTimes=#{shareTimes}</if>
+			<if test="goodTimes!=null">and goodTimes=#{goodTimes}</if>
+			<if test="notGoodTimes!=null">and notGoodTimes=#{notGoodTimes}</if>
+			<if test="auditStatus!=null">and auditStatus=#{auditStatus}</if>
+			<if test="createDate!=null">and createDate=#{createDate}</if>
+			<if test="creator!=null">and creator=#{creator}</if>
+			<if test="updateDate!=null">and updateDate=#{updateDate}</if>
+			<if test="updator!=null">and updator=#{updator}</if>
+			<if test="remark!=null">and remark=#{remark}</if>
+		</set> 
+		<where>
+			<if test="id!=null">id=#{id}</if>
+		</where>
+	</update>
+	<delete id="deleteHtmlInfo" parameterType="HtmlInfo">
+		DELETE FROM  htmlinfo 
+		<where>
+			<if test="id!=null">id=#{id}</if>
+		</where>
+	</delete>
+</mapper>

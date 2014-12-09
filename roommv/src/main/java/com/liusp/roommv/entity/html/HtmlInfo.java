@@ -1,52 +1,25 @@
 package com.liusp.roommv.entity.html;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import java.util.Date;
 
-import com.liusp.roommv.entity.base.AbstractCRUDBaseBO;
+public class HtmlInfo {
 
-@Entity
-@Table(name = "html")
-public class HtmlInfo extends AbstractCRUDBaseBO {
-	@Id
-	@Column(name = "id")
 	private String id;
-
-	@Column(name = "title")
 	private String title;
-
-	@Column(name = "imageUrl")
 	private String imageUrl;
-
-	@Column(name = "htmlId")
 	private String htmlId;
-
-	@Column(name = "content")
 	private String content;
-
-	@Column(name = "ipInfo")
 	private String ipInfo;
-
-	@Column(name = "viewTimes")
 	private Integer viewTimes;
-
-	@Column(name = "shareTimes")
 	private Integer shareTimes;
-
-	@Column(name = "goodTimes")
 	private Integer goodTimes;
-
-	@Column(name = "notGoodTimes")
 	private Integer notGoodTimes;
-
-	@Column(name = "auditStatus")
 	private String auditStatus;
-
-	@Column(name = "remark")
 	private String remark;
-
+	private Date createDate;
+	private String creator;
+	private Date updateDate;
+	private String updator;
 	public String getId() {
 		return id;
 	}
@@ -141,6 +114,38 @@ public class HtmlInfo extends AbstractCRUDBaseBO {
 
 	public void setRemark(String remark) {
 		this.remark = remark;
+	}
+
+	public Date getCreateDate() {
+		return createDate;
+	}
+
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
+	}
+
+	public String getCreator() {
+		return creator;
+	}
+
+	public void setCreator(String creator) {
+		this.creator = creator;
+	}
+
+	public Date getUpdateDate() {
+		return updateDate;
+	}
+
+	public void setUpdateDate(Date updateDate) {
+		this.updateDate = updateDate;
+	}
+
+	public String getUpdator() {
+		return updator;
+	}
+
+	public void setUpdator(String updator) {
+		this.updator = updator;
 	}
 
 }

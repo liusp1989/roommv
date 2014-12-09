@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<taglib xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-jsptaglibrary_2_1.xsd"
+	version="2.1">
+
+	<description>JSTL 1.1 roommv library</description>
+	<display-name>JSTL roommv</display-name>
+	<tlib-version>1.1</tlib-version>
+	<short-name>roommv</short-name>
+	<uri>http://www.roommv.com/jsp/jstl/roommv</uri>
+	<function>
+		<description>
+查询审核静态常量
+</description>
+		<name>auditStatusName</name>
+		<function-class>com.liusp.roommv.common.RoommvConstant</function-class>
+		<function-signature>java.lang.String getAuditStatusNameByCode(java.lang.String)</function-signature>
+		<example>
+${roommv:auditStatusName("ing")}
+</example>
+	</function>
+</taglib>
