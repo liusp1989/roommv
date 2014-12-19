@@ -57,7 +57,7 @@ public class UploadFileController {
 			htmlInfo.setImageUrl(imageUrl);
 			htmlInfo.setIpInfo(request.getRemoteAddr());
 			if (htmlInfoService.getHtmlInfoById(id) == null) {
-				htmlInfoService.auditHtmlInfo(htmlInfo);
+				htmlInfoService.save(htmlInfo);
 			} else {
 				htmlInfoService.updateHtmlInfo(htmlInfo);
 			}

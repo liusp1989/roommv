@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.liusp.roommv.annotation.MybatisMapper;
 import com.liusp.roommv.entity.html.HtmlInfo;
+import com.liusp.roommv.entity.html.HtmlTemplate;
 
 @MybatisMapper
 public interface IHtmlInfoDao {
@@ -18,5 +19,7 @@ public interface IHtmlInfoDao {
 	void deleteHtmlInfo(HtmlInfo htmlInfo);
 
 	HtmlInfo queryHtmlInfoById(String id);
+
+	List<HtmlTemplate> queryHtmlTemplate(Map<String, Object> criteria);
 
 }

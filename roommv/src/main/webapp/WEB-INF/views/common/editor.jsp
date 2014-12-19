@@ -81,7 +81,6 @@
 		if (!hasContent) {
 			alert("还没有编辑文章");
 		} else {
-			debugger;
 			var bodyContent = UE.getEditor('editor').getContent();
 			var formatContent = bodyContent.replace(/\"/g,"'");
 			$("#content").val(formatContent);

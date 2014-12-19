@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.liusp.roommv.entity.html.HtmlInfo;
+import com.liusp.roommv.entity.html.HtmlTemplate;
 
 public interface IHtmlInfoService {
 	void auditHtmlInfo(HtmlInfo orightmlInfo) throws IOException;
@@ -20,5 +21,9 @@ public interface IHtmlInfoService {
 	HtmlInfo getHtmlInfoById(String id);
 
 	void updateHtmlInfo(HtmlInfo htmlInfo);
+
+	List<HtmlTemplate> getHtmlTemplate(Map<String, Object> criteria);
+
+	void saveAndWriteFile(HtmlInfo htmlInfo) throws Exception;
 
 }

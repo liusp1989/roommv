@@ -69,8 +69,8 @@ public class HtmlInfoController {
 			ModelMap modelMap) throws UnsupportedEncodingException {
 		Map<String, Object> criteria = new HashMap<String, Object>();
 		criteria.put("id", htmlInfo.getId());
-		HtmlInfo orightmlInfo = (HtmlInfo) htmlInfoService
-				.getHtmlInfos(criteria);
+		HtmlInfo orightmlInfo = (HtmlInfo) htmlInfoService.getHtmlInfos(
+				criteria).get(0);
 		orightmlInfo.setUpdateDate(new Date());
 		orightmlInfo.setAuditStatus(htmlInfo.getAuditStatus());
 		orightmlInfo.setRemark(htmlInfo.getRemark());
@@ -126,7 +126,7 @@ public class HtmlInfoController {
 		try {
 			htmlInfo.setCreateDate(new Date());
 			htmlInfo.setUpdateDate(new Date());
-			htmlInfoService.save(htmlInfo);
+			htmlInfoService.saveAndWriteFile(htmlInfo);
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

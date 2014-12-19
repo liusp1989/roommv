@@ -23,6 +23,7 @@ import org.springframework.util.StringUtils;
 import com.liusp.roommv.common.RoommvConstant;
 import com.liusp.roommv.dao.htmlInfo.IHtmlInfoDao;
 import com.liusp.roommv.entity.html.HtmlInfo;
+import com.liusp.roommv.entity.html.HtmlTemplate;
 import com.liusp.roommv.index.HtmlIndexer;
 
 @Service(value = "htmlInfoService")
@@ -31,8 +32,6 @@ public class HtmlInfoServiceImpl implements IHtmlInfoService {
 			.getLogger(HtmlInfoServiceImpl.class);
 	@Resource()
 	private IHtmlInfoDao htmlInfoDao;
-
-
 
 	@Override
 	public void saveOrUpdateHtmlInfo(HtmlInfo htmlInfo) throws Exception {
@@ -63,7 +62,7 @@ public class HtmlInfoServiceImpl implements IHtmlInfoService {
 			Analyzer analyzer = new PaodingAnalyzer();
 			HtmlIndexer htmlIndexer = new HtmlIndexer(
 					RoommvConstant.HTML_INDEXES_PATH, destFilePath,
-					OpenMode.APPEND);
+					OpenMode.CREATE_OR_APPEND);
 			htmlIndexer.setAnalyzer(analyzer);
 			htmlIndexer.createSearchIndexes();
 		}
@@ -72,77 +71,7 @@ public class HtmlInfoServiceImpl implements IHtmlInfoService {
 	@Override
 	public void save(HtmlInfo htmlInfo) throws Exception {
 		// TODO Auto-generated method stub
-		String content = htmlInfo.getContent();
-		String htmlId = htmlInfo.getHtmlId();
-		String title = htmlInfo.getTitle();
-		String destFilePath = RoommvConstant.HTML_FILES_TEMPPATH;
-		File destFilePathFile = new File(destFilePath);
-
-		if (!destFilePathFile.exists()) {
-			destFilePathFile.mkdirs();
-		}
-		if (StringUtils.isEmpty(htmlId)) {
-			htmlId = String.valueOf(new Date().getTime());
-		}
-		String destFileName = htmlId + ".html";
-		File destFile = new File(destFilePath, destFileName);
-
-		htmlInfo.setUpdateDate(new Date());
-		htmlInfo.setHtmlId(htmlId);
-		this.saveOrUpdateHtmlInfo(htmlInfo);
-		StringBuilder titleBuilder = new StringBuilder(100);
-		titleBuilder
-				.append("<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN'\n");
-		titleBuilder.append("'http://www.w3.org/TR/html4/loose.dtd'>\n");
-		titleBuilder.append("<head>\n");
-		titleBuilder
-				.append("<meta http-equiv='Content-Type' content='text/html; charset=utf-8'/>\n");
-		titleBuilder.append("<title>").append(title).append("</title>\n");
-		titleBuilder
-				.append("<link href='../css/bootstrap.min.css' type='text/css' rel='stylesheet' />\n");
-		titleBuilder
-				.append("<link href='../css/bootstrap-theme.min.css' type='text/css' rel='stylesheet' />\n");
-		titleBuilder.append("</head>\n");
-		StringBuilder bodyBuilder = new StringBuilder(4000);
-		bodyBuilder.append("<body>\n");
-		bodyBuilder.append("<div name='content'>\n");
-		bodyBuilder.append(content);
-		bodyBuilder.append("<p name='createDate'>");
-		bodyBuilder.append(htmlInfo.getCreateDate());
-		bodyBuilder.append("</p>\n");
-		bodyBuilder.append("<p name='author'>");
-		bodyBuilder.append(htmlInfo.getCreator());
-		bodyBuilder.append("</p>\n");
-		bodyBuilder.append("</div>\n");
-		bodyBuilder.append("<body>\n");
-
-		StringBuilder footerBuilder = new StringBuilder(200);
-		footerBuilder.append("</html>\n");
-		footerBuilder
-				.append("<script src='http://libs.baidu.com/jquery/1.11.1/jquery.js' type='text/javascript'></script>\n");
-		footerBuilder.append("<script type='text/javascript'>\n");
-		footerBuilder
-				.append("window.jQuery||document.write('<script src=&quot;../js/jquery-1.11.1.min.js&quot;><\\/script>');\n");
-		footerBuilder.append("</script>\n");
-		footerBuilder
-				.append("<script src='http://libs.baidu.com/bootstrap/3.2.0/js/bootstrap.min.js' type='text/javascript'></script>\n");
-		footerBuilder.append("<script type='text/javascript'>\n");
-		footerBuilder
-				.append("window.jQuery||document.write('<script src=&quot;../js/bootstrap.min.js&quot;><\\/script>');\n");
-		footerBuilder.append("</script>\n");
-		String htmlStr = titleBuilder.toString() + bodyBuilder.toString()
-				+ footerBuilder.toString();
-		OutputStreamWriter writer = new OutputStreamWriter(
-				new FileOutputStream(destFile), "UTF-8");
-		try {
-			writer.write(htmlStr);
-			writer.flush();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			logger.error("操作失败", e);
-		} finally {
-			writer.close();
-		}
+		htmlInfoDao.addHtmlInfo(htmlInfo);
 	}
 
 	@Override
@@ -167,6 +96,65 @@ public class HtmlInfoServiceImpl implements IHtmlInfoService {
 	public void updateHtmlInfo(HtmlInfo htmlInfo) {
 		// TODO Auto-generated method stub
 		htmlInfoDao.updateHtmlInfo(htmlInfo);
+	}
+
+	@Override
+	public List<HtmlTemplate> getHtmlTemplate(Map<String, Object> criteria) {
+		// TODO Auto-generated method stub
+		return htmlInfoDao.queryHtmlTemplate(criteria);
+	}
+
+	@Override
+	public void saveAndWriteFile(HtmlInfo htmlInfo) throws Exception {
+		// TODO Auto-generated method stub
+		String content = htmlInfo.getContent();
+		String htmlId = htmlInfo.getHtmlId();
+		String title = htmlInfo.getTitle();
+		String destFilePath = RoommvConstant.HTML_FILES_TEMPPATH;
+		File destFilePathFile = new File(destFilePath);
+
+		if (!destFilePathFile.exists()) {
+			destFilePathFile.mkdirs();
+		}
+		if (StringUtils.isEmpty(htmlId)) {
+			htmlId = String.valueOf(new Date().getTime());
+		}
+		String destFileName = htmlId + ".html";
+		File destFile = new File(destFilePath, destFileName);
+
+		htmlInfo.setUpdateDate(new Date());
+		htmlInfo.setHtmlId(htmlId);
+		this.saveOrUpdateHtmlInfo(htmlInfo);
+		String htmlStr = this.getHtmlStr(content);
+		OutputStreamWriter writer = new OutputStreamWriter(
+				new FileOutputStream(destFile), "UTF-8");
+		try {
+			writer.write(htmlStr);
+			writer.flush();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			logger.error("操作失败", e);
+		} finally {
+			writer.close();
+		}
+	}
+	private String getHtmlStr(String content) {
+		StringBuilder htmlBuilder = new StringBuilder(4000);
+		Map<String, Object> criteria = new HashMap<String, Object>();
+		criteria.put("useStatus", 1);
+		HtmlTemplate htmlTemplate = this.getHtmlTemplate(criteria).get(0);
+
+		htmlBuilder.append(htmlTemplate.getBeforeHeader());
+		htmlBuilder.append(htmlTemplate.getAfterHeader());
+
+		htmlBuilder.append(htmlTemplate.getBeforeContent());
+		htmlBuilder.append(content);
+		htmlBuilder.append(htmlTemplate.getAfterContent());
+
+		htmlBuilder.append(htmlTemplate.getBeforeFooter());
+		htmlBuilder.append(htmlTemplate.getAfterFooter());
+		String htmlStr = htmlBuilder.toString();
+		return htmlStr;
 	}
 
 }
