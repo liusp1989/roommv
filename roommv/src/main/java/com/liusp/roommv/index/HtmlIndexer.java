@@ -23,8 +23,6 @@ import org.apache.lucene.util.Version;
 import org.htmlparser.NodeFilter;
 import org.htmlparser.Parser;
 import org.htmlparser.filters.CssSelectorNodeFilter;
-import org.htmlparser.filters.NodeClassFilter;
-import org.htmlparser.tags.TitleTag;
 import org.htmlparser.util.NodeList;
 import org.htmlparser.util.ParserException;
 import org.springframework.util.StringUtils;
@@ -128,7 +126,7 @@ public class HtmlIndexer implements Indexer {
 		// TODO Auto-generated method stub
 		Parser parser = Parser.createParser(htmlstr, "utf-8");
 		NodeFilter cssSelectorFilter = new CssSelectorNodeFilter(
-				"p[name='author']");
+				RoommvConstant.AUTHOR_CSSSELECTORNODEFILTER);
 		NodeList nodeList = parser.extractAllNodesThatMatch(cssSelectorFilter);
 		if (nodeList == null || nodeList.size() == 0) {
 			return "";
@@ -141,7 +139,7 @@ public class HtmlIndexer implements Indexer {
 		// TODO Auto-generated method stub
 		Parser parser = Parser.createParser(htmlstr, "utf-8");
 		NodeFilter cssSelectorFilter = new CssSelectorNodeFilter(
-				"p[name='createDate']");
+				RoommvConstant.CREATEDATE_CSSSELECTORNODEFILTER);
 		NodeList nodeList = parser.extractAllNodesThatMatch(cssSelectorFilter);
 		if (nodeList == null || nodeList.size() == 0) {
 			return "";
@@ -154,7 +152,7 @@ public class HtmlIndexer implements Indexer {
 		// TODO Auto-generated method stub
 		Parser parser = Parser.createParser(htmlstr, "utf-8");
 		CssSelectorNodeFilter contentFilter = new CssSelectorNodeFilter(
-				"div[name='content']");
+				RoommvConstant.CONTENT_CSSSELECTORNODEFILTER);
 		NodeList nodeList = parser.extractAllNodesThatMatch(contentFilter);
 		if (nodeList == null || nodeList.size() == 0) {
 			return "";
@@ -166,7 +164,8 @@ public class HtmlIndexer implements Indexer {
 	private String getTile(String htmlstr) throws ParserException {
 		// TODO Auto-generated method stub
 		Parser parser = Parser.createParser(htmlstr, "utf-8");
-		NodeClassFilter titleFilter = new NodeClassFilter(TitleTag.class);
+		CssSelectorNodeFilter titleFilter = new CssSelectorNodeFilter(
+				RoommvConstant.TITLE_CSSSELECTORNODEFILTER);
 		NodeList nodeList = parser.extractAllNodesThatMatch(titleFilter);
 		if (nodeList == null || nodeList.size() == 0) {
 			return "";

@@ -1,9 +1,14 @@
 package com.liusp.roommv.entity.html;
 
+import java.io.Serializable;
 
 
-public class HtmlTemplate {
+public class HtmlTemplate implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String id;
 	private String beforeHeader;
 	private String afterHeader;

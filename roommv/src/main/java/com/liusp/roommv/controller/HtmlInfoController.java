@@ -11,23 +11,21 @@ import java.util.UUID;
 import javax.annotation.Resource;
 
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.liusp.roommv.common.RoommvConstant.AuditStatus;
 import com.liusp.roommv.entity.html.HtmlInfo;
+import com.liusp.roommv.entity.html.HtmlInfo.HandleStatus;
 import com.liusp.roommv.service.htmlInfo.IHtmlInfoService;
 import com.liusp.roommv.vo.AjaxResult;
 import com.liusp.roommv.vo.Page;
 
 @Controller(value = "htmlInfoController")
-@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @RequestMapping("/htmlInfo")
 public class HtmlInfoController {
 	public static final Logger logger = Logger
@@ -39,6 +37,7 @@ public class HtmlInfoController {
 	public String list(ModelMap model, Page page) {
 		Map<String, Object> criteria = new HashMap<String, Object>();
 		criteria.put("page", page);
+		criteria.put("nehandleStatus", HandleStatus.EDIT_ING.getCode());
 		List<HtmlInfo> htmlInfos = htmlInfoService.getHtmlInfos(criteria);
 		model.put("htmlInfos", htmlInfos);
 		return "common/list";
@@ -64,8 +63,8 @@ public class HtmlInfoController {
 		return "common/editor";
 	}
 
-	@RequestMapping("audit")
-	public String audit(@ModelAttribute("htmlInfo") HtmlInfo htmlInfo,
+	@RequestMapping("submitOraudit")
+	public String submitOraudit(@ModelAttribute("htmlInfo") HtmlInfo htmlInfo,
 			ModelMap modelMap) throws UnsupportedEncodingException {
 		Map<String, Object> criteria = new HashMap<String, Object>();
 		criteria.put("id", htmlInfo.getId());
@@ -73,6 +72,7 @@ public class HtmlInfoController {
 				criteria).get(0);
 		orightmlInfo.setUpdateDate(new Date());
 		orightmlInfo.setAuditStatus(htmlInfo.getAuditStatus());
+		orightmlInfo.setHandleStatus(htmlInfo.getHandleStatus());
 		orightmlInfo.setRemark(htmlInfo.getRemark());
 		try {
 			htmlInfoService.auditHtmlInfo(orightmlInfo);
@@ -81,7 +81,7 @@ public class HtmlInfoController {
 			logger.error("操作失败", e);
 		}
 		modelMap.put("htmlInfo", htmlInfo);
-		return "common/view";
+		return "redirect:view/" + orightmlInfo.getId();
 	}
 
 	@RequestMapping("view/{id}")
@@ -95,37 +95,14 @@ public class HtmlInfoController {
 		return "common/view";
 	}
 
-	@RequestMapping("imageUrl")
-	public @ResponseBody
-	AjaxResult getImageUrl(String id) {
-		AjaxResult ajaxResult = new AjaxResult();
-		HtmlInfo htmlInfo;
-		try {
-			Map<String, Object> criteria = new HashMap<String, Object>();
-			criteria.put("id", id);
-			List<HtmlInfo> htmlInfos = htmlInfoService.getHtmlInfos(criteria);
-			if (!CollectionUtils.isEmpty(htmlInfos)) {
-				htmlInfo = htmlInfos.get(0);
-				ajaxResult.setResultCode(AjaxResult.ResultCode.SUCCESS);
-				ajaxResult.setValue(htmlInfo.getImageUrl());
-			} else {
-				ajaxResult.setResultCode(AjaxResult.ResultCode.SUCCESS);
-				ajaxResult.setValue(null);
-			}
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			ajaxResult.setResultCode(AjaxResult.ResultCode.FAILED);
-			logger.error("操作失败", e);
-		}
-		return ajaxResult;
-	}
-
 	@RequestMapping("save")
 	public String save(@ModelAttribute("htmlInfo") HtmlInfo htmlInfo,
 			ModelMap model) throws IOException {
 		try {
 			htmlInfo.setCreateDate(new Date());
 			htmlInfo.setUpdateDate(new Date());
+			htmlInfo.setHandleStatus(HandleStatus.EDIT_SAVE.getCode());
+			htmlInfo.setAuditStatus(AuditStatus.AUDIT_ING.getCode());
 			htmlInfoService.saveAndWriteFile(htmlInfo);
 
 		} catch (Exception e) {
@@ -133,7 +110,7 @@ public class HtmlInfoController {
 			logger.error("操作失败", e);
 		}
 		model.put("htmlInfo", htmlInfo);
-		return "common/editor";
+		return "redirect:view/" + htmlInfo.getId();
 	}
 
 	@RequestMapping("cancel")

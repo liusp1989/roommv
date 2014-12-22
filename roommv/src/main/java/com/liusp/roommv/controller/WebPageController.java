@@ -17,8 +17,6 @@ import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.search.highlight.InvalidTokenOffsetsException;
 import org.htmlparser.util.ParserException;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.StringUtils;
@@ -33,7 +31,6 @@ import com.liusp.roommv.vo.Html;
 import com.liusp.roommv.vo.Page;
 
 @Controller(value = "webPageController")
-@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @RequestMapping("/webpage")
 public class WebPageController {
 	@Resource(name = "webPageService")

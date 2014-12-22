@@ -14,12 +14,20 @@ public class RoommvConstant {
 			.getProperty("index.textFragment.times"));// 标注查询结果高亮显示的片段出现次数
 	public static final int HTML_CONTENT_LENGTH = Integer.valueOf(System
 			.getProperty("html.content.length"));// 查询出html内容显示长度
-	public static final String ALL_SIGN = "ALL";
-
+	public static final String ALL_SIGN = "ALL";// 索引项查出所有数据的标志
+	public static final String CACHE_KEY_SEPARATER = ":";
 	public static final String NO_MULTI_VALIDATE = "/ueditor";/*
 															 * 因为使用了百度ueditor所以/
 															 * ueditor请求不做spring的multi校验
 															 */
+	public static final String AUTHOR_CSSSELECTORNODEFILTER = System
+			.getProperty("author.cssselectornodefilter");
+	public static final String CREATEDATE_CSSSELECTORNODEFILTER = System
+			.getProperty("createdate.cssselectornodefilter");
+	public static final String CONTENT_CSSSELECTORNODEFILTER = System
+			.getProperty("content.cssselectornodefilter");
+	public static final String TITLE_CSSSELECTORNODEFILTER = System
+			.getProperty("title.cssselectornodefilter");
 
 	public static String getAuditStatusNameByCode(String code) {
 		String name = null;

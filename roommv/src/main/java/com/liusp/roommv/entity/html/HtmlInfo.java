@@ -1,9 +1,19 @@
 package com.liusp.roommv.entity.html;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class HtmlInfo {
+/**
+ * 
+ * @author jackyliu
+ * 
+ */
+public class HtmlInfo implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String id;
 	private String title;
 	private String imageUrl;
@@ -14,6 +24,7 @@ public class HtmlInfo {
 	private Integer shareTimes;
 	private Integer goodTimes;
 	private Integer notGoodTimes;
+	private String handleStatus;
 	private String auditStatus;
 	private String remark;
 	private Date createDate;
@@ -148,4 +159,40 @@ public class HtmlInfo {
 		this.updator = updator;
 	}
 
+	public String getHandleStatus() {
+		return handleStatus;
+	}
+
+	public void setHandleStatus(String handleStatus) {
+		this.handleStatus = handleStatus;
+	}
+
+	public static enum HandleStatus {
+		EDIT_ING("ing", "正在编辑"), EDIT_SAVE("save", "已保存"), EDIT_SUBMIT(
+				"submit", "已投稿");
+		private String code;
+		private String name;
+
+		HandleStatus(String code, String name) {
+			this.code = code;
+			this.name = name;
+		}
+
+		public String getCode() {
+			return code;
+		}
+
+		public void setCode(String code) {
+			this.code = code;
+		}
+
+		public String getName() {
+			return name;
+		}
+
+		public void setName(String name) {
+			this.name = name;
+		}
+
+	}
 }

@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
-   pageEncoding="UTF-8" isELIgnored="false"%>
+	pageEncoding="UTF-8" isELIgnored="false"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -22,28 +22,42 @@
 	src="<c:url value='/ueditor/lang/zh-cn/zh-cn.js'/>"></script>
 </head>
 <body>
-<form action="<c:url value='/htmlInfo/audit'/>">
-	<div>
-		<div >
-		<input type="hidden" id="id" name="id" value="${htmlInfo.id}"/>
-		<input type="hidden" id="htmlId" name="htmlId" value="${htmlInfo.htmlId}"/>
-			<iframe
-				src="<c:url value='/tempstaticpages/${htmlInfo.htmlId}.html'/>"
-				style="width: 100%; height: 1000px;border:0"  ></iframe>
-		</div>
-		<div class="text-center"
-			style="z-index: 999px; position: fixed; bottom: 0; height: 150px; width: 100%;box-shadow:-10px -5px 3px #888888">
-			<select name="auditStatus" id="auditStatus" style="width: 100px; height: 33px; margin-top: 20px">
-				<option value="ing" <c:if test="${htmlInfo.auditStatus eq 'ing'}">selected</c:if> >待审核</option>
-				<option value="pass" <c:if test="${htmlInfo.auditStatus eq 'pass'}">selected</c:if> >审核通过</option>
-				<option value="fail" <c:if test="${htmlInfo.auditStatus eq 'fail'}">selected</c:if> >审核不通过</option>
-			</select><c:if test="${htmlInfo.auditStatus eq 'ing' or htmlInfo.auditStatus eq null}"><input id="audit" type="submit" class="btn btn-primary" style="margin-left: 30px" value="审核文章"></input></c:if> <br />
-			备注:
-			<textarea name="remark" id="remark" style="width: 800px; height: 80px; margin-top: 10px"
-				rows="2">${htmlInfo.remark}</textarea>
+	<form action="<c:url value='/htmlInfo/submitOraudit'/>"  method="post">
+		<div>
+			<div>
+				<input type="hidden" id="id" name="id" value="${htmlInfo.id}" /> <input
+					type="hidden" id="htmlId" name="htmlId" value="${htmlInfo.htmlId}" />
+				<iframe
+					src="<c:url value='/tempstaticpages/${htmlInfo.htmlId}.html'/>"
+					style="width: 100%; height: 1000px; border: 0"></iframe>
+			</div>
+			<div class="text-center"
+				style="z-index: 999px; position: fixed; bottom: 0; height: 150px; width: 100%; box-shadow: -10px -5px 3px #888888">
+				<c:if test="${htmlInfo.handleStatus eq 'submit'}">
+					<c:if test="${htmlInfo.auditStatus eq 'ing' }">
+						<select name="auditStatus" id="auditStatus"
+							style="width: 100px; height: 33px; margin-top: 20px">
+							<option value="pass"
+								<c:if test="${htmlInfo.auditStatus eq 'pass'}">selected</c:if>>审核通过</option>
+							<option value="fail"
+								<c:if test="${htmlInfo.auditStatus eq 'fail'}">selected</c:if>>审核不通过</option>
+						</select>
+						<input type="hidden" name="handleStatus" value="submit"></input>
+						<input id="audit" type="submit" class="btn btn-primary"
+							style="margin-left: 30px" value="审核文章"></input>
+					</c:if>
+				</c:if>
+				<c:if test="${htmlInfo.handleStatus eq 'save'}">
+					<input type="hidden" name="handleStatus" value="submit"></input>
+					<input id="audit" type="submit" class="btn btn-primary"
+						style="margin-left: 30px" value="投稿"></input>
+				</c:if>
+				<br /> 备注:
+				<textarea name="remark" id="remark"
+					style="width: 800px; height: 80px; margin-top: 10px" rows="2">${htmlInfo.remark}</textarea>
 
+			</div>
 		</div>
-	</div>
 	</form>
 </body>
 </html>

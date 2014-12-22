@@ -86,6 +86,7 @@ public class HtmlInfoServiceImpl implements IHtmlInfoService {
 		htmlInfoDao.deleteHtmlInfo(htmlInfo);
 	}
 
+
 	@Override
 	public HtmlInfo getHtmlInfoById(String id) {
 		// TODO Auto-generated method stub
