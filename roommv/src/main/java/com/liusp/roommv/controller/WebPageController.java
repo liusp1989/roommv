@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 
 import net.paoding.analysis.analyzer.PaodingAnalyzer;
 
@@ -33,10 +32,8 @@ import com.liusp.roommv.vo.Page;
 @Controller(value = "webPageController")
 @RequestMapping("/webpage")
 public class WebPageController {
-	@Resource(name = "webPageService")
+	@Resource()
 	private IWebPageService webPageService;
-	@Resource
-	private HttpServletRequest httpServletRequest;
 
 	@RequestMapping(value = { "/list" }, method = { RequestMethod.GET })
 	public String webPageList(ModelMap map, String searchInfo)

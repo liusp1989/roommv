@@ -4,6 +4,8 @@ import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 
+import com.liusp.roommv.socket.SocketClient;
+
 public class InitServlet extends HttpServlet {
 	/**
 	 * 
@@ -16,8 +18,11 @@ public class InitServlet extends HttpServlet {
 	@Override
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
-		// String webAppPath = config.getServletContext().getRealPath(".");
-		// System.setProperty("",
-		// webAppPath.replace("\\", "/"));
+		try {
+			SocketClient.createClientSocket();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

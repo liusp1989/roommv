@@ -44,9 +44,7 @@ public class UploadFileController {
 				+ oriFileName.substring(oriFileName.lastIndexOf("."));
 		File destFile = new File(destFilePath, destFileName);
 		file.transferTo(destFile);
-		String imageUrl = request.getScheme() + "://" + request.getServerName()
-				+ ":" + request.getServerPort() + request.getContextPath()
-				+ "/upload/htmlimage" + "/" + destFileName;
+		String imageUrl = "/upload/htmlimage" + "/" + destFileName;
 		HtmlInfo htmlInfo = new HtmlInfo();
 		htmlInfo.setId(id);
 		htmlInfo.setCreateDate(new Date());

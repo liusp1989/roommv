@@ -65,9 +65,7 @@
 						</div>
 					</div>
 					<div>
-						<iframe id="showIframe" name="showIframe"
-							style="border: 0px; width: 200px; height: 100px;float:left;margin-left:50px" scrolling="no"
-							src="${htmlInfo.imageUrl }"></iframe>
+						<img alt="" src="<c:url value='${htmlInfo.imageUrl }'/>" style="width: 220px; height: 150p;margin-left:50px" />
 					</div>
 				</div>
 				
