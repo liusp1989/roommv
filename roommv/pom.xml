@@ -115,7 +115,20 @@
 			<artifactId>lucene-queryparser</artifactId>
 		</dependency>
 		<!-- Lucene 结束 -->
-
+		<!-- activeMQ开始 -->
+		<dependency>
+			<groupId>org.apache.activemq</groupId>
+			<artifactId>activemq-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>geronimo</groupId>
+			<artifactId>geronimo-j2ee</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.geronimo.specs</groupId>
+			<artifactId>geronimo-jms_1.1_spec</artifactId>
+		</dependency>
+		<!-- activeMQ结束 -->
 		<!-- 百度 开始 -->
 		<dependency>
 			<groupId>com.baidu</groupId>
@@ -183,6 +196,10 @@
 		</dependency>
 
 		<dependency>
+			<groupId>org.json</groupId>
+			<artifactId>json</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>org.codehaus.jackson</groupId>
 			<artifactId>jackson-core-asl</artifactId>
 		</dependency>
@@ -214,6 +231,11 @@
 		<dependency>
 			<groupId>commons-pool</groupId>
 			<artifactId>commons-pool</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>io.netty</groupId>
+			<artifactId>netty-all</artifactId>
 		</dependency>
 
 	</dependencies>
