@@ -71,7 +71,7 @@
 				
 				<div style="margin-top: 10px;">
 					<script id="editor" type="text/plain"
-						style="width:90%;height:450px;"></script>
+						style="width:1440px;height:450px;"></script>
 				</div>
 				
 			

@@ -53,7 +53,7 @@ public class SocketClient {
 			logger.info("bootstrap client 开始。。。。。。。。。。。。。。。。");
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("启动netty客户端失败", e);
 		}
 	}
 

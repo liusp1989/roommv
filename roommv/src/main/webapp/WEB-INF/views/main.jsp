@@ -8,35 +8,23 @@
 <title>浪漫屋|男人来自火星，女人来自金星</title>
 <link href="<c:url value='/css/bootstrap.min.css'/>" type="text/css"
 	rel="stylesheet" />
-<link href="<c:url value='/css/bootstrap-theme.min.css'/>" type="text/css"
-	rel="stylesheet" />
 <style type="text/css">
 body{
-background-attachment: fixed;
-background-color: #777;
-background-size: cover;
-background-repeat: no-repeat;
+background-color: #E6E6E6;
 }
 .navgul {
 	z-index: 3;
 	top: 0;
-	position: fixed;
 	box-shadow: 2px 2px 2px #cdcdcd;
 	width: 100%
 }
 
-
-.bg {
-	background-image: url("<c:url value='/images/bg.jpg'/>");
-	bg-size: cover -webkit-background-size:cover;
-	z-index: -1;
-}
 ul.nav li a{
 font-size:20px
 }
 </style>
 </head>
-<body class="bg">
+<body >
 	<div>
 		<div class="navgdiv">
 			<ul class="nav nav-pills nav-justified navgul" >

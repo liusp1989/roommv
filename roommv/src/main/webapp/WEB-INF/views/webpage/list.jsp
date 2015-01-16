@@ -23,7 +23,7 @@
 												<a target="_blank" style="text-decoration: none"
 													href="<c:url value='/staticpages/${html.id}.html' />">
 													<img alt=""
-													src="http://localhost:8081/roommv/upload/htmlimage/1419594978141.jpg"
+													src="http://localhost:8081/roommv/upload/htmlimage/1421891098125.jpg"
 													style="width: 220px; height: 150p" />
 												</a>
 											</div>

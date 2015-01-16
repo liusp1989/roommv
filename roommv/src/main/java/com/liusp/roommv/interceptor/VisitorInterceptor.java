@@ -10,6 +10,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
 import org.json.JSONObject;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
@@ -17,6 +18,8 @@ import com.liusp.roommv.socket.SocketClient;
 import com.liusp.roommv.vo.VisitInfo;
 
 public class VisitorInterceptor extends HandlerInterceptorAdapter {
+	private static final Logger logger = Logger
+			.getLogger(VisitorInterceptor.class);
 	@Override
 	public boolean preHandle(HttpServletRequest request,
 			HttpServletResponse response, Object handler) throws Exception {
@@ -34,11 +37,16 @@ public class VisitorInterceptor extends HandlerInterceptorAdapter {
 		visitInfo.setUserId(userId);
 		visitInfo.setCreateDate(sdf.format(new Date()));
 		busMap.put("visitInfo", visitInfo);
-		Channel channel = SocketClient.getChannelHandler().getChannel();
-		if (channel.isOpen()) {
-			channel.writeAndFlush(JSONObject.wrap(busMap).toString());
-		} else {
-			throw new RuntimeException("客户端通道已关闭，无法传输数据");
+		try {
+			Channel channel = SocketClient.getChannelHandler().getChannel();
+			if (channel.isOpen()) {
+				channel.writeAndFlush(JSONObject.wrap(busMap).toString());
+			} else {
+				throw new RuntimeException("客户端通道已关闭，无法传输数据");
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			logger.error("客户端启动失败，无法传输数据");
 		}
 		return true;
 	}

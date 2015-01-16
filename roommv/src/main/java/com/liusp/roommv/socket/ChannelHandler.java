@@ -9,7 +9,6 @@ public class ChannelHandler extends ChannelInboundHandlerAdapter {
 	@Override
 	public void channelActive(ChannelHandlerContext ctx) throws Exception {
 		this.setChannel(ctx.channel());
-		System.out.println(ctx.channel().isOpen());
 	}
 
 	@Override

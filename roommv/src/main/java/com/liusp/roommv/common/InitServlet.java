@@ -4,9 +4,12 @@ import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 
+import org.apache.log4j.Logger;
+
 import com.liusp.roommv.socket.SocketClient;
 
 public class InitServlet extends HttpServlet {
+	public static final Logger logger = Logger.getLogger(InitServlet.class);
 	/**
 	 * 
 	 */
@@ -22,7 +25,7 @@ public class InitServlet extends HttpServlet {
 			SocketClient.createClientSocket();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("启动netty客户端失败", e);
 		}
 	}
 }
