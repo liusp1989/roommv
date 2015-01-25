@@ -6,8 +6,7 @@ import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.*;
 
 import com.liusp.roommvserver.common.Constants;
 
@@ -18,13 +17,13 @@ public class BaseRedisServiceImpl implements BaseRedisService {
 	// @Resource
 	// private StringRedisTemplate stringRedisTemplate;
 	@Resource
-	private JedisPool jedisPool;
+	private ShardedJedisPool shardedJedisPool;
 
-	public Jedis getJedisClient() {
+	public ShardedJedis getShardedJedis() {
 		try {
-			Jedis jedis = jedisPool.getResource();
-			if (jedis != null) {
-				return jedis;
+			ShardedJedis shardedJedis = shardedJedisPool.getResource();
+			if (shardedJedis != null) {
+				return shardedJedis;
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -34,12 +33,12 @@ public class BaseRedisServiceImpl implements BaseRedisService {
 
 	}
 
-	public void returnBrokenResource(Jedis jedis) {
-		jedisPool.returnBrokenResource(jedis);
+	public void returnBrokenResource(ShardedJedis shardedJedis) {
+		shardedJedisPool.returnBrokenResource(shardedJedis);
 	};
 
-	public void returnResource(Jedis jedis) {
-		jedisPool.returnResource(jedis);
+	public void returnResource(ShardedJedis shardedJedis) {
+		shardedJedisPool.returnResource(shardedJedis);
 	};
 	@Override
 	public Long getAutoIncrId(String name, Long step) {
@@ -51,19 +50,34 @@ public class BaseRedisServiceImpl implements BaseRedisService {
 			throw new RuntimeException("自增值不能为空");
 		}
 		Long autoId = null;
-		Jedis jedis = null;
+		ShardedJedis jedis = null;
 		try {
-			jedis = this.getJedisClient();
+			jedis = this.getShardedJedis();
 			autoId = jedis.incrBy(Constants.REDIS_ID_TABLE
 					+ Constants.REDIS_KEY_SEPARATOR + name, step);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			this.returnBrokenResource(jedis);
 			e.printStackTrace();
-		} finally {
-			this.returnResource(jedis);
 		}
+			this.returnResource(jedis);
 		return autoId == null ? 0 : autoId;
 	}
+
+	@Override
+	public String getValue(String key) {
+		String value = null;
+		ShardedJedis jedis = null;
+		try {
+			jedis = this.getShardedJedis();
+			 value = jedis.get(key);
+		}catch (Exception e) {
+			// TODO Auto-generated catch block
+			this.returnBrokenResource(jedis);
+			e.printStackTrace();
+		}
+		return value;
+	}
+
 
 }

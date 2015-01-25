@@ -18,7 +18,7 @@ public class ChannelHandler extends ChannelInboundHandlerAdapter {
 		// TODO Auto-generated method stub
 		System.out.println(msg);
 		try {
-			// visitInfoService.addVisitInfo(msg.toString());
+			visitInfoService.addVisitInfo(msg.toString());
 			ctx.writeAndFlush("{code:500}");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

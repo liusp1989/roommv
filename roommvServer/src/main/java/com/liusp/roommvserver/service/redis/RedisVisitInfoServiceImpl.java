@@ -12,6 +12,7 @@ import redis.clients.jedis.Jedis;
 
 import com.liusp.roommvserver.common.Constants;
 import com.liusp.roommvserver.entity.VisitInfo;
+import redis.clients.jedis.ShardedJedis;
 
 @Service
 public class RedisVisitInfoServiceImpl implements RedisVisitInfoService {
@@ -25,9 +26,9 @@ public class RedisVisitInfoServiceImpl implements RedisVisitInfoService {
 
 		Long id = baseRedisService.getAutoIncrId("visitInfo", 1l);
 		visitInfo.setId(id.intValue());
-		Jedis jedis = null;
+		ShardedJedis jedis = null;
 		try {
-			jedis = baseRedisService.getJedisClient();
+			jedis = baseRedisService.getShardedJedis();
 			HashMapper<VisitInfo, String, String> hashMapper = new DecoratingStringHashMapper<VisitInfo>(
 					new JacksonHashMapper<VisitInfo>(VisitInfo.class));
 			jedis.hmset("visitInfo" + Constants.REDIS_KEY_SEPARATOR + id,
@@ -73,5 +74,10 @@ public class RedisVisitInfoServiceImpl implements RedisVisitInfoService {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public String getVisitInfo(String key) {
+	return 	baseRedisService.getValue(key);
 	}
 }
