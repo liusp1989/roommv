@@ -12,6 +12,7 @@
 	<modules>
 		<module>roommv</module>
 		<module>paoding</module>
+		<module>roommvServer</module>
 	</modules>
 	<properties>
 		<spring.version>3.2.3.RELEASE</spring.version>

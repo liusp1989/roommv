@@ -41,7 +41,6 @@ public class UrlCountReceiver {
 					}
 				}
 			});
-			;
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
