@@ -9,8 +9,7 @@
 	<groupId>com.liusp</groupId>
 	<artifactId>roommvServer</artifactId>
 	<packaging>war</packaging>
-	<version>0.0.1-SNAPSHOT</version>
-	<name>roommvServer Maven Webapp</name>
+	<name>roommvServer</name>
 	<url>http://maven.apache.org</url>
 
 	<dependencies>
