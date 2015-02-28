@@ -1,42 +1,29 @@
 package com.liusp.roommv.activeMQ;
 
-import javax.jms.Connection;
-import javax.jms.Destination;
-import javax.jms.JMSException;
-import javax.jms.MessageProducer;
-import javax.jms.Session;
-import javax.jms.TextMessage;
+import javax.jms.*;
 
 import org.apache.activemq.ActiveMQConnectionFactory;
 
+import java.util.UUID;
+
 public class UrlCountSender {
-	private static final String URL = "tcp://localhost:61616";
-	private static final String QUEUE_NAME = "urlCountQueue";
 
-	public static void main(String[] args) throws JMSException {
-
-		ActiveMQConnectionFactory factory = null;
-		Connection connection = null;
-		Session session = null;
-		MessageProducer producer = null;
+	public  void send(final Session session,String queueName) throws JMSException {
 		try {
-			factory = new ActiveMQConnectionFactory("admin", "admin", URL);
-			connection = factory.createConnection();
-			connection.start();
-			session = connection.createSession(false,
-					Session.AUTO_ACKNOWLEDGE);
-			Destination destination = session.createQueue(QUEUE_NAME);
-			producer = session.createProducer(destination);
+			Destination destination = session.createQueue(queueName);
+			Destination tempDestination = session.createTemporaryQueue();
+			MessageProducer producer  = session.createProducer(destination);
 			TextMessage message = session.createTextMessage();
 			message.setStringProperty("body", "呵呵呵恶化");
+			message.setJMSReplyTo(tempDestination);
+			message.setJMSCorrelationID(UUID.randomUUID().toString());
 			producer.send(message);
+			MessageConsumer consumer = session.createConsumer(tempDestination);
+			MapMessage msg = (MapMessage) consumer.receive();
+			System.out.println(msg.getString("rep"));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} finally {
-			producer.close();
-			session.close();
-			connection.close();
 		}
 	}
 }

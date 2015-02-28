@@ -37,8 +37,8 @@ public class CacheAop {
 	public static final Logger logger = Logger.getLogger(CacheAop.class);
 	private JdkSerializationRedisSerializer jdkSerializer = new JdkSerializationRedisSerializer();
 	private StringRedisSerializer stringSerializer = new StringRedisSerializer();
-	@Resource(name = "redisTemplate")
-	private RedisTemplate<Object, Object> redisTemplate;
+	//@Resource(name = "redisTemplate")
+	//private RedisTemplate<Object, Object> redisTemplate;
 
 	// @Pointcut(value = "@annotation(com.liusp.roommv.annotation.Cache)")
 	@Pointcut("execution(* com.liusp.roommv..*.*(..)) && @annotation(com.liusp.roommv.annotation.Cache)")
@@ -49,75 +49,75 @@ public class CacheAop {
 	public void doBefore() {
 	}
 
-	@SuppressWarnings("rawtypes")
-	@Around(value = "useCache()")
-	public Object doAround(ProceedingJoinPoint pjp) throws Throwable {
-		Object result = null;
-		MethodSignature methodSignature = (MethodSignature) pjp.getSignature();
-		Method method = methodSignature.getMethod();
-		Cache cache = method.getAnnotation(Cache.class);
-		if (cache.enable()) {// 缓存是否启用
-			Annotation[][] annotations = method.getParameterAnnotations();
-			boolean isKeyUnique = isKeyUnique(annotations);
-			String cacheKey = "";
-			Class returnType = method.getReturnType();
-			cacheKey = getCacheKey(pjp, method, cache, annotations);
-			if (isKeyUnique) {// 主键是否唯一
-				logger.info("#############尝试缓存中获取数据#################");
-				result = getCacheByKey(cacheKey, returnType);
-			} else {
-				logger.info("#############尝试缓存中获取数据#################");
-				Set<Object> keysSet = redisTemplate.keys(cacheKey + "*");
-				if (keysSet.size() != 0) {
-					List<Object> objects = new ArrayList<Object>();
-					for (Object K : keysSet) {
-						objects.add(getCacheByKey(K, returnType));
-					}
-					if (!CollectionUtils.isEmpty(objects)) {
-						if (returnType.newInstance() instanceof Collection) {
-							result = objects;
-						} else {
-							result = objects.get(0);
-						}
-					}
-				}
-			}
-			if (result == null) {// 缓存没有就去数据库取
-				logger.info("#############尝试缓存中获取数据失败,前往数据库获取数据#################");
-				if (!isKeyUnique) {
-					cacheKey += RoommvConstant.CACHE_KEY_SEPARATER
-							+ new Date().getTime();
-				}
-				result = pjp.proceed();
-				redisTemplate.setValueSerializer(jdkSerializer);
-				redisTemplate.afterPropertiesSet();
-				redisTemplate.opsForValue().set(cacheKey, result, 24,
-						TimeUnit.HOURS);
-			}
-		} else {
-			pjp.proceed();
-		}
-		return result;
-	}
-
-	/**
-	 * 根据key获取缓存
-	 * 
-	 * @param k
-	 * @param returnType
-	 * @return
-	 */
-	private Object getCacheByKey(Object k, Class returnType) {
-		Object result;
-		if (returnType.equals(String.class)) {
-			result = redisTemplate.opsForValue().get(k);
-		} else {
-			redisTemplate.setValueSerializer(jdkSerializer);
-			redisTemplate.afterPropertiesSet();
-			result = redisTemplate.opsForValue().get(k);
-		}
-		return result;
-	}
+//	@SuppressWarnings("rawtypes")
+//	@Around(value = "useCache()")
+//	public Object doAround(ProceedingJoinPoint pjp) throws Throwable {
+//		Object result = null;
+//		MethodSignature methodSignature = (MethodSignature) pjp.getSignature();
+//		Method method = methodSignature.getMethod();
+//		Cache cache = method.getAnnotation(Cache.class);
+//		if (cache.enable()) {// 缓存是否启用
+//			Annotation[][] annotations = method.getParameterAnnotations();
+//			boolean isKeyUnique = isKeyUnique(annotations);
+//			String cacheKey = "";
+//			Class returnType = method.getReturnType();
+//			cacheKey = getCacheKey(pjp, method, cache, annotations);
+//			if (isKeyUnique) {// 主键是否唯一
+//				logger.info("#############尝试缓存中获取数据#################");
+//				result = getCacheByKey(cacheKey, returnType);
+//			} else {
+//				logger.info("#############尝试缓存中获取数据#################");
+//				Set<Object> keysSet = redisTemplate.keys(cacheKey + "*");
+//				if (keysSet.size() != 0) {
+//					List<Object> objects = new ArrayList<Object>();
+//					for (Object K : keysSet) {
+//						objects.add(getCacheByKey(K, returnType));
+//					}
+//					if (!CollectionUtils.isEmpty(objects)) {
+//						if (returnType.newInstance() instanceof Collection) {
+//							result = objects;
+//						} else {
+//							result = objects.get(0);
+//						}
+//					}
+//				}
+//			}
+//			if (result == null) {// 缓存没有就去数据库取
+//				logger.info("#############尝试缓存中获取数据失败,前往数据库获取数据#################");
+//				if (!isKeyUnique) {
+//					cacheKey += RoommvConstant.CACHE_KEY_SEPARATER
+//							+ new Date().getTime();
+//				}
+//				result = pjp.proceed();
+//				redisTemplate.setValueSerializer(jdkSerializer);
+//				redisTemplate.afterPropertiesSet();
+//				redisTemplate.opsForValue().set(cacheKey, result, 24,
+//						TimeUnit.HOURS);
+//			}
+//		} else {
+//			pjp.proceed();
+//		}
+////		return result;
+//	}
+//
+//	/**
+//	 * 根据key获取缓存
+//	 *
+//	 * @param k
+//	 * @param returnType
+//	 * @return
+//	 */
+//	private Object getCacheByKey(Object k, Class returnType) {
+//		Object result;
+//		if (returnType.equals(String.class)) {
+//			result = redisTemplate.opsForValue().get(k);
+//		} else {
+//			redisTemplate.setValueSerializer(jdkSerializer);
+//			redisTemplate.afterPropertiesSet();
+//			result = redisTemplate.opsForValue().get(k);
+//		}
+//		return result;
+//	}
 
 	/**
 	 * 判断方法参数是否提供唯一标识主键
