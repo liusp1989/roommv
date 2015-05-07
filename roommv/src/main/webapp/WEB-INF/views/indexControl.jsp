@@ -80,7 +80,7 @@
 						if (status == "success" && data.resultCode == 0) {
 							 setTimeout("$('#doing').modal('hide')", 1000); 
 						} else {
-							$('#doing').modal('hide')
+							$('#doing').modal('hide');
 							$('#error').modal('show');
 						}
 					});
@@ -92,7 +92,7 @@
 				if (status == "success" && data.resultCode == 0) {
 					setTimeout("$('#doing').modal('hide')", 1000); 
 				} else {
-					$('#doing').modal('hide')
+					$('#doing').modal('hide');
 					$('#error').modal('show');
 				}
 			});

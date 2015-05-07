@@ -6,8 +6,7 @@ import net.paoding.analysis.analyzer.PaodingAnalyzer;
 
 import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.Analyzer;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.context.annotation.Scope;
+import org.apache.lucene.index.IndexWriterConfig.OpenMode;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -17,7 +16,6 @@ import com.liusp.roommv.index.HtmlIndexer;
 import com.liusp.roommv.vo.AjaxResult;
 
 @Controller(value = "indexController")
-@Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 @RequestMapping("/indexControl")
 public class IndexController {
 	public static final Logger logger = Logger.getLogger(IndexController.class);
@@ -47,7 +45,7 @@ public class IndexController {
 			Analyzer analyzer = new PaodingAnalyzer();
 			HtmlIndexer indexer = new HtmlIndexer(
 					RoommvConstant.HTML_INDEXES_PATH,
-					RoommvConstant.HTML_FILES_PATH);
+					RoommvConstant.HTML_FILES_PATH, OpenMode.CREATE);
 			indexer.setAnalyzer(analyzer);
 			indexer.createSearchIndexes();
 			result.setResultCode(AjaxResult.ResultCode.SUCCESS);
@@ -75,6 +73,7 @@ public class IndexController {
 		}
 		return result;
 	}
+
 	@RequestMapping("")
 	public String indexControl() throws IOException {
 		return "indexControl";

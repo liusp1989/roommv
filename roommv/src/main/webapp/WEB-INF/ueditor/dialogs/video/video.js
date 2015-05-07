@@ -47,17 +47,12 @@
 
         //编辑视频时初始化相关信息
         (function(){
-            var videoDialogUrlPrefix = editor.getOpt('videoDialogUrlPrefix');
-            var videoUrlPrefix = editor.getOpt('videoUrlPrefix');
             var img = editor.selection.getRange().getClosedNode(),url;
             if(img && img.className){
                 var hasFakedClass = (img.className == "edui-faked-video"),
                     hasUploadClass = img.className.indexOf("edui-upload-video")!=-1;
                 if(hasFakedClass || hasUploadClass) {
-                	var url = img.getAttribute("_url");
-                	url=url.replace(videoUrlPrefix,videoDialogUrlPrefix);
-                	url= url.replace(".//","./");
-                    $G("videoUrl").value = url ;
+                    $G("videoUrl").value = url = img.getAttribute("_url");
                     $G("videoWidth").value = img.width;
                     $G("videoHeight").value = img.height;
                     var align = domUtils.getComputedStyle(img,"float"),
@@ -119,16 +114,12 @@
      * 将单个视频信息插入编辑器中
      */
     function insertSingle(){
-        var videoDialogUrlPrefix = editor.getOpt('videoDialogUrlPrefix');
-        var videoUrlPrefix = editor.getOpt('videoUrlPrefix');
         var width = $G("videoWidth"),
             height = $G("videoHeight"),
             url=$G('videoUrl').value,
             align = findFocus("videoFloat","name");
         if(!url) return false;
         if ( !checkNum( [width, height] ) ) return false;
-        url=url.replace(videoDialogUrlPrefix,videoUrlPrefix);
-        url=url.replace(".//","./");
         editor.execCommand('insertvideo', {
             url: convert_url(url),
             width: width.value,
@@ -298,7 +289,6 @@
             align = findFocus("upload_alignment","name") || 'none';
         for(var key in uploadVideoList) {
             var file = uploadVideoList[key];
-            var url = uploadDir + file.url;
             videoObjs.push({
                 url: uploadDir + file.url,
                 width:width,

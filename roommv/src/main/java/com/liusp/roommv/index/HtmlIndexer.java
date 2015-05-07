@@ -16,14 +16,13 @@ import org.apache.lucene.document.FieldType;
 import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
+import org.apache.lucene.index.IndexWriterConfig.OpenMode;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
 import org.htmlparser.NodeFilter;
 import org.htmlparser.Parser;
 import org.htmlparser.filters.CssSelectorNodeFilter;
-import org.htmlparser.filters.NodeClassFilter;
-import org.htmlparser.tags.TitleTag;
 import org.htmlparser.util.NodeList;
 import org.htmlparser.util.ParserException;
 import org.springframework.util.StringUtils;
@@ -36,10 +35,13 @@ public class HtmlIndexer implements Indexer {
 	private String indexesPath;
 	private String filesPath;
 	private static Analyzer analyzer;
+	private OpenMode openMode = OpenMode.APPEND;// 索引创建模式 增量还是新增
 
-	public HtmlIndexer(final String indexesPath, final String filesPath) {
+	public HtmlIndexer(final String indexesPath, final String filesPath,
+			OpenMode openMode) {
 		this.indexesPath = indexesPath;
 		this.filesPath = filesPath;
+		this.openMode = openMode;
 	}
 
 	public HtmlIndexer() {
@@ -124,7 +126,7 @@ public class HtmlIndexer implements Indexer {
 		// TODO Auto-generated method stub
 		Parser parser = Parser.createParser(htmlstr, "utf-8");
 		NodeFilter cssSelectorFilter = new CssSelectorNodeFilter(
-				"p[name='author']");
+				RoommvConstant.AUTHOR_CSSSELECTORNODEFILTER);
 		NodeList nodeList = parser.extractAllNodesThatMatch(cssSelectorFilter);
 		if (nodeList == null || nodeList.size() == 0) {
 			return "";
@@ -137,7 +139,7 @@ public class HtmlIndexer implements Indexer {
 		// TODO Auto-generated method stub
 		Parser parser = Parser.createParser(htmlstr, "utf-8");
 		NodeFilter cssSelectorFilter = new CssSelectorNodeFilter(
-				"p[name='createDate']");
+				RoommvConstant.CREATEDATE_CSSSELECTORNODEFILTER);
 		NodeList nodeList = parser.extractAllNodesThatMatch(cssSelectorFilter);
 		if (nodeList == null || nodeList.size() == 0) {
 			return "";
@@ -150,7 +152,7 @@ public class HtmlIndexer implements Indexer {
 		// TODO Auto-generated method stub
 		Parser parser = Parser.createParser(htmlstr, "utf-8");
 		CssSelectorNodeFilter contentFilter = new CssSelectorNodeFilter(
-				"div[name='content']");
+				RoommvConstant.CONTENT_CSSSELECTORNODEFILTER);
 		NodeList nodeList = parser.extractAllNodesThatMatch(contentFilter);
 		if (nodeList == null || nodeList.size() == 0) {
 			return "";
@@ -162,7 +164,8 @@ public class HtmlIndexer implements Indexer {
 	private String getTile(String htmlstr) throws ParserException {
 		// TODO Auto-generated method stub
 		Parser parser = Parser.createParser(htmlstr, "utf-8");
-		NodeClassFilter titleFilter = new NodeClassFilter(TitleTag.class);
+		CssSelectorNodeFilter titleFilter = new CssSelectorNodeFilter(
+				RoommvConstant.TITLE_CSSSELECTORNODEFILTER);
 		NodeList nodeList = parser.extractAllNodesThatMatch(titleFilter);
 		if (nodeList == null || nodeList.size() == 0) {
 			return "";
@@ -207,6 +210,7 @@ public class HtmlIndexer implements Indexer {
 				throws IOException {
 			IndexWriterConfig indexWriterConfig = new IndexWriterConfig(
 					Version.LATEST, analyzer);
+		indexWriterConfig.setOpenMode(openMode);
 			Directory directory = FSDirectory.open(indexesFile);
 		IndexWriter indexWriter = new IndexWriter(directory,
 								indexWriterConfig);

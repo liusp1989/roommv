@@ -1,7 +1,8 @@
 package com.liusp.roommv.dao.webPage;
 
-import com.liusp.roommv.dao.base.IBaseDao;
+import com.liusp.roommv.annotation.MybatisMapper;
 
-public interface IWebPageDao extends IBaseDao {
+@MybatisMapper
+public interface IWebPageDao {
 
 }

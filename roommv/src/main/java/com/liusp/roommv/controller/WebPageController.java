@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 
 import net.paoding.analysis.analyzer.PaodingAnalyzer;
 
@@ -17,8 +16,6 @@ import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.search.highlight.InvalidTokenOffsetsException;
 import org.htmlparser.util.ParserException;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.StringUtils;
@@ -27,21 +24,16 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.liusp.roommv.common.RoommvConstant;
-import com.liusp.roommv.index.HtmlIndexer;
 import com.liusp.roommv.index.HtmlSearcher;
-import com.liusp.roommv.index.Indexer;
 import com.liusp.roommv.service.webPage.IWebPageService;
 import com.liusp.roommv.vo.Html;
 import com.liusp.roommv.vo.Page;
 
 @Controller(value = "webPageController")
-@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @RequestMapping("/webpage")
 public class WebPageController {
-	@Resource(name = "webPageService")
+	@Resource()
 	private IWebPageService webPageService;
-	@Resource
-	private HttpServletRequest httpServletRequest;
 
 	@RequestMapping(value = { "/list" }, method = { RequestMethod.GET })
 	public String webPageList(ModelMap map, String searchInfo)
@@ -95,10 +87,6 @@ public class WebPageController {
 			ParseException, InvalidTokenOffsetsException {
 		// TODO Auto-generated method stub
 		Analyzer analyzer = new PaodingAnalyzer();
-		Indexer htmlIndexer = new HtmlIndexer(
-				RoommvConstant.HTML_INDEXES_PATH,
-				RoommvConstant.HTML_FILES_PATH);
-		htmlIndexer.setAnalyzer(analyzer);
 		HtmlSearcher htmlSearcher = new HtmlSearcher(
 				RoommvConstant.HTML_INDEXES_PATH);
 		htmlSearcher.setAnalyzer(analyzer);

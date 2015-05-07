@@ -1,2 +1,0 @@
-update wms_sales_order tt set tt.goods_amount=(select  sum(t.unit_price*t.quantity)  from wms_sales_order_goods t  where tt.id=t.order_id group by  t.order_id)
-where exists(select  t.id  from wms_sales_order_goods t  where tt.id=t.order_id) and tt.join_time>=to_date('2014-10-17','yyyy-mm-dd') 

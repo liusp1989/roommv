@@ -129,6 +129,7 @@
         if(color) {
             domUtils.setStyle($G("colorPicker"), "background-color", color);
         }
+
         if(url && /^\//.test(url)) {
             var a = document.createElement('a');
             a.href = url;
@@ -297,8 +298,6 @@
         pushData: function (list) {
             var i, item, img, icon, _this = this,
                 urlPrefix = editor.getOpt('imageManagerUrlPrefix');
-            var imageListPath = editor.getOpt('imageManagerListPath');
-            var imageSeparator = editor.getOpt('imageSeparator');
             for (i = 0; i < list.length; i++) {
                 if(list[i] && list[i].url) {
                     item = document.createElement('li');
@@ -311,11 +310,8 @@
                         }
                     })(img));
                     img.width = 113;
-                    var imageUrl = list[i].url;
-                    var changePart = imageUrl.substring(imageUrl.lastIndexOf(imageSeparator)+imageSeparator.length);
-                    var imgsrc = (urlPrefix +imageListPath+changePart).replace(".//","./");
-                    img.setAttribute('src', imgsrc+ (imageUrl.indexOf('?') == -1 ? '?noCache=':'&noCache=') + (+new Date()).toString(36));
-                    img.setAttribute('_src', imgsrc);
+                    img.setAttribute('src', urlPrefix + list[i].url + (list[i].url.indexOf('?') == -1 ? '?noCache=':'&noCache=') + (+new Date()).toString(36) );
+                    img.setAttribute('_src', urlPrefix + list[i].url);
                     domUtils.addClass(icon, 'icon');
 
                     item.appendChild(img);

@@ -1,31 +1,36 @@
 package com.liusp.roommv.entity.html;
 
-import javax.persistence.Column;
+import java.io.Serializable;
+import java.util.Date;
 
-import com.liusp.roommv.entity.base.AbstractCRUDBaseBO;
+/**
+ * 
+ * @author jackyliu
+ * 
+ */
+public class HtmlInfo implements Serializable {
 
-public class HtmlInfo extends AbstractCRUDBaseBO {
-	@Column(name = "id")
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String id;
-
-	@Column(name = "imageUrl")
+	private String title;
 	private String imageUrl;
-
-	@Column(name = "ipInfo")
+	private String htmlId;
+	private String content;
 	private String ipInfo;
-
-	@Column(name = "viewTimes")
 	private Integer viewTimes;
-
-	@Column(name = "shareTimes")
 	private Integer shareTimes;
-
-	@Column(name = "goodTimes")
 	private Integer goodTimes;
-
-	@Column(name = "notGoodTimes")
 	private Integer notGoodTimes;
-
+	private String handleStatus;
+	private String auditStatus;
+	private String remark;
+	private Date createDate;
+	private String creator;
+	private Date updateDate;
+	private String updator;
 	public String getId() {
 		return id;
 	}
@@ -34,12 +39,28 @@ public class HtmlInfo extends AbstractCRUDBaseBO {
 		this.id = id;
 	}
 
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
 	public String getImageUrl() {
 		return imageUrl;
 	}
 
 	public void setImageUrl(String imageUrl) {
 		this.imageUrl = imageUrl;
+	}
+
+	public String getContent() {
+		return content;
+	}
+
+	public void setContent(String content) {
+		this.content = content;
 	}
 
 	public String getIpInfo() {
@@ -82,4 +103,96 @@ public class HtmlInfo extends AbstractCRUDBaseBO {
 		this.notGoodTimes = notGoodTimes;
 	}
 
+	public String getHtmlId() {
+		return htmlId;
+	}
+
+	public void setHtmlId(String htmlId) {
+		this.htmlId = htmlId;
+	}
+
+	public String getAuditStatus() {
+		return auditStatus;
+	}
+
+	public void setAuditStatus(String auditStatus) {
+		this.auditStatus = auditStatus;
+	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+
+	public Date getCreateDate() {
+		return createDate;
+	}
+
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
+	}
+
+	public String getCreator() {
+		return creator;
+	}
+
+	public void setCreator(String creator) {
+		this.creator = creator;
+	}
+
+	public Date getUpdateDate() {
+		return updateDate;
+	}
+
+	public void setUpdateDate(Date updateDate) {
+		this.updateDate = updateDate;
+	}
+
+	public String getUpdator() {
+		return updator;
+	}
+
+	public void setUpdator(String updator) {
+		this.updator = updator;
+	}
+
+	public String getHandleStatus() {
+		return handleStatus;
+	}
+
+	public void setHandleStatus(String handleStatus) {
+		this.handleStatus = handleStatus;
+	}
+
+	public static enum HandleStatus {
+		EDIT_ING("ing", "正在编辑"), EDIT_SAVE("save", "已保存"), EDIT_SUBMIT(
+				"submit", "已投稿");
+		private String code;
+		private String name;
+
+		HandleStatus(String code, String name) {
+			this.code = code;
+			this.name = name;
+		}
+
+		public String getCode() {
+			return code;
+		}
+
+		public void setCode(String code) {
+			this.code = code;
+		}
+
+		public String getName() {
+			return name;
+		}
+
+		public void setName(String name) {
+			this.name = name;
+		}
+
+	}
 }

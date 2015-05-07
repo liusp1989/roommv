@@ -4,7 +4,12 @@ import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 
+import org.apache.log4j.Logger;
+
+import com.liusp.roommv.socket.SocketClient;
+
 public class InitServlet extends HttpServlet {
+	public static final Logger logger = Logger.getLogger(InitServlet.class);
 	/**
 	 * 
 	 */
@@ -16,8 +21,11 @@ public class InitServlet extends HttpServlet {
 	@Override
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
-		// String webAppPath = config.getServletContext().getRealPath(".");
-		// System.setProperty(RoommvConstant.WEB_APP_PATH_KEY,
-		// webAppPath.replace("\\", "/"));
+		try {
+			SocketClient.createClientSocket();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			logger.error("启动netty客户端失败", e);
+		}
 	}
 }

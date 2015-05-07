@@ -666,10 +666,8 @@
         },
         /* 添加图片到列表界面上 */
         pushData: function (list) {
-            var fileManagerUrlPrefix = editor.getOpt('fileManagerUrlPrefix');
-            var fileManagerListPath = editor.getOpt('fileManagerListPath');
-            var fileSeparator = editor.getOpt('fileSeparator');
-            var i, item, img, filetype, preview, icon, _this = this;
+            var i, item, img, filetype, preview, icon, _this = this,
+                urlPrefix = editor.getOpt('fileManagerUrlPrefix');
             for (i = 0; i < list.length; i++) {
                 if(list[i] && list[i].url) {
                     item = document.createElement('li');
@@ -684,10 +682,7 @@
                             };
                         })(preview));
                         preview.width = 113;
-                        var fileUrl =list[i].url;
-                        var changePart = fileUrl.substring(fileUrl.lastIndexOf(fileSeparator)+fileSeparator.length);
-                        var url = (fileManagerUrlPrefix +fileManagerListPath+changePart).replace(".//","./");
-                        preview.setAttribute('src', url + (list[i].url.indexOf('?') == -1 ? '?noCache=':'&noCache=') + (+new Date()).toString(36) );
+                        preview.setAttribute('src', urlPrefix + list[i].url + (list[i].url.indexOf('?') == -1 ? '?noCache=':'&noCache=') + (+new Date()).toString(36) );
                     } else {
                         var ic = document.createElement('i'),
                             textSpan = document.createElement('span');
@@ -701,10 +696,7 @@
                         domUtils.addClass(ic, 'file-preview');
                     }
                     domUtils.addClass(icon, 'icon');
-                    var fileUrl =list[i].url;
-                    var changePart = fileUrl.substring(fileUrl.lastIndexOf(fileSeparator)+fileSeparator.length);
-                    var url = (fileManagerUrlPrefix +fileManagerListPath+changePart).replace(".//","./");
-                    item.setAttribute('data-url', url);
+                    item.setAttribute('data-url', urlPrefix + list[i].url);
                     if (list[i].original) {
                         item.setAttribute('data-title', list[i].original);
                     }
@@ -743,15 +735,10 @@
             }
         },
         getInsertList: function () {
-            var fileManagerUrlPrefix = editor.getOpt('fileManagerUrlPrefix');
-            var fileUrlPrefix = editor.getOpt('fileUrlPrefix');
-            
             var i, lis = this.list.children, list = [];
             for (i = 0; i < lis.length; i++) {
                 if (domUtils.hasClass(lis[i], 'selected')) {
                     var url = lis[i].getAttribute('data-url');
-                    url=url.replace(fileManagerUrlPrefix,fileUrlPrefix);
-                    url=url.replace(".//","./");
                     var title = lis[i].getAttribute('data-title') || url.substr(url.lastIndexOf('/') + 1);
                     list.push({
                         title: title,

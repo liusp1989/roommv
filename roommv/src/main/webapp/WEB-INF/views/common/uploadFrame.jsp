@@ -11,15 +11,12 @@
 <link href="<c:url value='/css/bootstrap-theme.min.css'/>"
 	type="text/css" rel="stylesheet" />
 </head>
-<body>
+<body  onload="load()">
 	<form id="imageForm" action="<c:url value='/upload/htmlImage' />"
-		method="post" enctype="multipart/form-data" style="width:100%">
-		<div style="margin:0px; display:inline">
-			标题图片：<input type="file" name="file" />
-
-			<input type="button" id="imageSubmit" value="上传图片"  style="margin-top:20px"/>
-
-			<img src="<c:out value='${result.value}'/>" alt="" id="image" style="float:right;margin-right:700px;overflow:hidden"/>
+		method="post" enctype="multipart/form-data" style="width: 100%" onsubmit="return validate();">
+		<div style="margin: 0px; display: inline">
+			标题图片：<input type="file" name="file" class="btn btn-primary" accept="image/*" id="file" style="width: 250px;" />
+			 <input id="id" type="hidden" name="id" value="${id }" /></input>
 		</div>
 	</form>
 </body>
@@ -41,8 +38,46 @@
 					.write("<script src=\"<c:url value='/js/bootstrap.min.js'/>\"><\/script>");
 </script>
 <script type="text/javascript">
-$("#imageSubmit").click(function(){
-	$("#imageForm").submit();
-});
+ 	function load() {//当修改页面初始化时，result.value为空，所以需要重新去后台取一边
+		var id = $(window.parent.document).find("#id").val();
+		$("#id").val(id);
+		//var url = "<c:out value='${result.value}'/>";
+		$.ajax({
+			url : "<c:url value='/htmlInfo/imageUrl'/>",
+			type : "POST",
+			data : {
+				"id" : id
+			},
+			success : function(result) {
+				if (result.resultCode == 0) {
+					$(window.parent.document).find("#showIframe").attr("src",
+							result.value);
+				}
+			}
+		});
+	} 
+	function validate() {
+		var fileName = $("#file").val();
+		if (fileName == "") {
+			alert("请先选择要上传的文件");
+			return false;
+		} else {
+			var types = [ "BMP", "PCX", "TIFF", "GIF", "JPEG", "TGA", "EXIF",
+					"JPG", "FPX", "SVG", "PSD", "CDR", "PCD", "DXF", "UFO",
+					"EPS", "AI", "PNG", "HDRI", "RAW", "bmp", "pcx", "tiff",
+					"gif", "jpeg", "tga", "exif", "fpx", "svg", "psd", "cdr",
+					"pcd", "dxf", "ufo", "eps", "ai", "png", "hdri", "raw",
+					"jpg" ];
+			var type = fileName.substring(fileName.lastIndexOf(".") + 1);
+			var rightTypes = types.some(function(item, index, array) {
+				return (type == item);
+			});
+			if (!rightTypes) {
+				alert("所选文件不属于图片类型");
+				return false;
+			}
+		}
+		return true;
+	}
 </script>
 
